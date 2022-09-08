@@ -1,79 +1,96 @@
 from pyswip import Prolog
 
 prolog = Prolog()
-prolog.consult("exo.pl")
+prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo.pl")
+
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
 def getExoplanets():
 
+    print("\nList of all the exoplanets:")
     myQuery = "prop(P, hostname, _)."
     planets = list(prolog.query(myQuery))
     for elem in planets:
-        queryPlanets = "- "+ elem["P"] +""
+        queryPlanets = "> "+ elem["P"] +""
         print(queryPlanets)
+
         
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti abitabili
 def getExoplanetsHabitable():
 
+    print("\nList of all the habitable exoplanets:")
     myQuery = "prop(P ,is_habitable, true)."
     planets = list(prolog.query(myQuery))
     for elem in planets:
-        queryPlanets = "- "+ elem["P"] +""
+        queryPlanets = "> "+ elem["P"] +""
         print(queryPlanets)
 
+
 # funzione per richiamare la query prolog che restituisce una descrizione del pianeta
-def getInfo(planet):
-    myQuery = "get_info_about("+ planet+ ")"
+def getInfo(planet):  
+
+    myQuery = "get_info_about("+ planet + ")"
     info = list(prolog.query(myQuery))
     
     
 #TO DO gestire gli errori
 # funzione per richiamare la query prolog che restituisce il valore della feuture indicata del pianeta dato
-def getFeautures(planet, feauture):
-    flag = False;
-    verb =""
-    feauture.strip()
-    if(feauture == "equilibriumtemperature"):
+def getfeatures(planet, feature):
+    
+    verb = ""    
+    property = feature.replace(" ", "_")
+    print(property)
+
+    if(property == "equilibrium_temperature"):
         verb = "has_temp"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
+
+    elif(property == "atmosphere_type"):
+        verb = "has_atmosphere"
+        myQuery = "prop(" + planet + ", " + verb + ", X)."
         
-    elif(feauture == "discoveryyear"):
+    elif(property == "discovery_year"):
         verb = "was_discovered"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
    
-    elif(feauture == "p"):
+    elif(property == "planetary_system"):
         verb = "hostname"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
         valueQuery = list(prolog.query(myQuery))
 
     else:
-        verb = "has_" + feauture
+        verb = "has_" + property
         myQuery = "prop(" + planet + ", " + verb + ", X)."
  
-    valueQuery = list(prolog.query(myQuery))    
-    print(valueQuery)
-    return
+    valueQuery = list(prolog.query(myQuery))      
+    print(valueQuery) 
+
     
 #funzione che permette di aggiungere un pianeta
-def addPlanet(planet,feauture,value):
+def addPlanet(planet,feature,value):
     
-    verb =""
-    feauture.strip()
-    if(feauture == "equilibriumtemperature"):
+    verb = ""
+    property = feature.replace(" ", "_")
+    print(property)
+
+    if(feature == "equilibrium_temperature"):
         verb = "has_temp"
-        myQuery = "prop(" + planet + ", " + verb + ", "+value+" )"
+        myQuery = "prop(" + planet + ", " + verb + ", " + value + " )"
+
+    elif(property == "atmosphere_type"):
+        verb = "has_atmosphere"
+        myQuery = "prop(" + planet + ", " + verb + ", " + value + " )"
         
-    elif(feauture == "discoveryyear"):
+    elif(feature == "discovery_year"):
         verb = "was_discovered"
-        myQuery = "prop(" + planet + ", " + verb + ", "+value+")"
+        myQuery = "prop(" + planet + ", " + verb + ", " + value + ")"
 
-    elif(feauture == "hostname"):
-        verb = feauture
-        myQuery = "prop(" + planet + ", " + verb + ", "+value+")"
-
+    elif(feature == "hostname"):
+        verb = feature
+        myQuery = "prop(" + planet + ", " + verb + ", " + value + ")"
     
     else:
-        verb = "has_" + feauture
+        verb = "has_" + feature
         myQuery = "prop(" + planet + ", " + verb + ", "+value+")"
         
     prolog.assertz(myQuery)
@@ -94,29 +111,24 @@ def getMassClass(planet):
     valueQuery = list(prolog.query(myQuery))
     print(valueQuery)
 
-        
 
 # funzione per richiamare la query prolog che restituisce il valore della feuture indicata della stella data
-def getStarFeautures(planet, feauture):
+def getStarfeatures(planet, feature):
     flag = False;
     verb =""
-    feauture.strip()
-    if(feauture == "effectivetemperature"):
+    feature.strip()
+
+    if(feature == "effectivetemperature"):
         verb = "his_star_has_temp"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
         
-    elif(feauture == "metallicity"):
+    elif(feature == "metallicity"):
         verb = "his_star_has_met"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
    
-    elif(feauture == "spectralclassification"):
+    elif(feature == "spectralclassification"):
         verb = "his_star_is_class"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
 
     valueQuery = list(prolog.query(myQuery))    
-    print(valueQuery)
-    
-
-
-
-    
+    print(valueQuery)    

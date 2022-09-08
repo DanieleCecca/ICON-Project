@@ -344,29 +344,29 @@ prop(P, has_composition, rocky) :-
 prop(P, is_in_habitable_class, C) :-
     prop(P, is_habitable, true),
     prop(P, has_temp, T),
-    prop(T, defines, C).
+    prop(T, states, C).
 
-prop(T, defines, hypopsychroplanet) :-
+prop(T, states, hypopsychroplanet) :-
     T < 190.
 
-prop(T, defines, psychroplanet) :-
+prop(T, states, psychroplanet) :-
     T > 190, T < 240.
 
-prop(T, defines, mesoplanet) :-
+prop(T, states, mesoplanet) :-
     T > 240, T < 300.
 
 % description
-get_info_about(P) :-
-    prop(P, hostname, S),
-    prop(P, was_discovered_in, A),
-    prop(P, is_mass_class, C),
-    write(P),
-    write(' is an exoplanet discovered in '),
-    write(A),
-    write(', it is in a planetary system whose star is '),
-    write(S),
-    write(', and it is of mass type '),
-    write(C).
+get_info_about(Planet) :-
+    prop(Planet, hostname, Star),
+    write(Planet),
+    write(' is an exoplanet in a planetary system whose star is '),
+    write(Star),
+    prop(Planet, is_mass_class, Class),
+    write(', it was classified by mass as a '),
+    write(Class),
+    prop(Planet, was_discovered_in, Year),
+    write(' and it was discovered in '),
+    write(Year).
 
 get_systems :-
     prop(_, hostname, S),

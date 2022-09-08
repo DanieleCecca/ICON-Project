@@ -1,3 +1,4 @@
+:- dynamic(prop/3).
 % general class definition
 prop(P, type, C) :- prop(S, subClassOf, C), prop(P, type, S).
 
@@ -54,7 +55,7 @@ prop(hd_3167_d,has_radius , 1.8).
 prop(ross_128_b, has_radius, 1.15).
 prop(gj_9827_b, has_radius, 1.04).
 
-% mass in Earth Unit (5,9726×10e24 kg)
+% mass in Earth Unit (5,9726Ã—10e24 kg)
 prop(k2_139_b, has_mass, 121.14).
 prop(k2_10_b, has_mass, 27).
 prop(k2_110_b,has_mass , 17.09).
@@ -71,7 +72,7 @@ prop(hd_3167_d,has_mass , 6.9).
 prop(ross_128_b,has_mass , 1.4).
 prop(gj_9827_b,has_mass , 8.2).
 
-% density in Earth Unit (5,51 g/cm³)
+% density in Earth Unit (5,51 g/cmÂ³)
 prop(k2_139_b, has_density, 0.16).
 prop(k2_10_b,has_density , 0.48).
 prop(k2_110_b,has_density , 1.36).
@@ -88,7 +89,7 @@ prop(hd_3167_d,has_density , 1.17).
 prop(ross_128_b,has_density , 1.31).
 prop(gj_9827_b, has_density, 2.28).
 
-% gravity in Earth Unit (9,807 m/s²)
+% gravity in Earth Unit (9,807 m/sÂ²)
 prop(k2_139_b, has_gravity, 1.46).
 prop(k2_10_b, has_gravity, 2.23).
 prop(k2_110_b,has_gravity , 2.49).
@@ -313,7 +314,7 @@ prop(D, implies, hot) :-
 prop(D, implies, warm) :-
     D > -1.40.
 
-% in-habitables exoplanets (PERCHè RIPETE???????????')
+% in-habitables exoplanets (PERCHÃ¨ RIPETE???????????')
 prop(P, is_inhabitable, true) :-
     prop(P, has_critic_conditions, true).
 
@@ -355,28 +356,24 @@ prop(T, defines, mesoplanet) :-
     T > 240, T < 300.
 
 % description
-get_info_about(P) :-
-    prop(P, hostname, S),
-    prop(P, was_discovered_in, A),
-    prop(P, is_mass_class, C),
-    write(P),
-    write(' is an exoplanet discovered in '),
-    write(A),
-    write(', it is in a planetary system whose star is '),
-    write(S),
-    write(', and it is of mass type '),
-    write(C).
+get_info_about(Planet) :-
+    prop(Planet, hostname, Star),
+    write(Planet),
+    write(' is an exoplanet in a planetary system whose star is '),
+    write(Star),
+    prop(Planet, was_discovered_in, Year),
+    write(' and it was discovered in '),
+    write(Year).
 
 get_systems :-
     prop(_, hostname, S),
     write(S).
 
 % get all the exoplanets (tutti quelli che hanno un hostname, quindi
-% tutti, nonostante si sarebbe potuto usare qls altro predicato perché
+% tutti, nonostante si sarebbe potuto usare qls altro predicato perchÃ©
 % sono tutti 'avvalorati')
 get_exoplanets :-
     prop(P, hostname, _),
     write(P).
-
 
 
