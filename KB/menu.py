@@ -40,16 +40,16 @@ def subMenuPlanet():
     if(command == 'e'):
         return
     else:
-        planet = input("\nEnter exoplanet name:\n")
+        planet = input("\nEnter exoplanet name: ")
         
         if(command == 'd'):
             pl.getInfo(planet)
             
         elif(command == 'f'):
             printPlanetFeatures()            
-            feature = input("\nEnter feature : ")
+            feature = input("\nEnter feature: ")
             pl.getFeatures(planet, feature)
-            if(feature=="p"):
+            if(feature == "p"):
                 subMenuStar(planet)
         
 
@@ -61,7 +61,7 @@ def menuAddingPlanet():
     while(exit !=True):
         print("Choose the feature to enter or press 'e' to escape:")
         printPlanetFeatures()
-        feature = input()
+        feature = input("> ")
         if(feature == "e"):           
             flag = True
             break            
@@ -105,7 +105,4 @@ def printStarFeatures():
     print("Features of the star:"
           +"\n- metallicity"
           +"\n- effective temperature"
-          +"\n- spectral classification")   
-    
-    
-    
+          +"\n- spectral classification")       

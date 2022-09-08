@@ -1,4 +1,6 @@
 :- dynamic(prop/3).
+:- dynamic(prop/2).
+
 % general class definition
 prop(P, type, C) :- prop(S, subClassOf, C), prop(P, type, S).
 
@@ -314,28 +316,7 @@ prop(D, implies, hot) :-
 prop(D, implies, warm) :-
     D > -1.40.
 
-% in-habitables exoplanets (PERCHè RIPETE???????????')
-prop(P, is_inhabitable, true) :-
-    prop(P, has_critic_conditions, true).
-
-prop(P, has_critic_conditions, true) :-
-    prop(P, is_in_zone, hot);
-    prop(P, is_mass_class, jovian);
-    prop(P, has_more_than_one_star, true).
-
-prop(P, has_more_than_one_star, true) :-
-    prop(P, has_stars_in_sys, N),
-    N > 1.
-
-% [test] habitable function TODO
-prop(P, is_habitable, true) :-
-    prop(P, is_in_zone, warm),
-    prop(P, has_composition, rocky),
-    prop(P, has_eccentricity, E),
-    prop(P, has_temp, T),
-    prop(P, has_stars_in_sys, N),
-    E > 0.00, T < 3500,  N is 1.
-
+% is an exoplanet made of rock?
 prop(P, has_composition, rocky) :-
     prop(P, has_composition, rocky_iron);
     prop(P, has_composition, rocky_water).
@@ -355,6 +336,30 @@ prop(T, states, psychroplanet) :-
 prop(T, states, mesoplanet) :-
     T > 240, T < 300.
 
+% habitable function
+prop(P, is_habitable, X) :-
+    prop(P, is_in_zone, warm),
+    prop(P, has_composition, rocky),
+    prop(P, has_eccentricity, E),
+    prop(P, has_temp, T),
+    prop(P, has_stars_in_sys, N),
+    E > 0.00, T < 3500,  N is 1
+    -> X = true; X = false.
+
+% in-habitable function
+prop(P, is_inhabitable, X) :-
+    prop(P, has_critic_conditions),
+    X = true.
+
+prop(P, has_critic_conditions) :-
+    prop(P, is_in_zone, hot);
+    prop(P, is_mass_class, jovian);
+    prop(P, has_more_than_one_star).
+
+prop(P, has_more_than_one_star):-
+    prop(P, has_stars_in_sys, N),
+    N > 1.
+
 % description
 get_info_about(Planet) :-
     prop(Planet, hostname, Star),
@@ -369,14 +374,24 @@ get_info_about(Planet) :-
     write(Year).
 
 get_systems :-
-    prop(_, hostname, S),
-    write(S).
+    prop(_, hostname, Star),
+    write(Star).
 
 % get all the exoplanets (tutti quelli che hanno un hostname, quindi
 % tutti, nonostante si sarebbe potuto usare qls altro predicato perché
 % sono tutti 'avvalorati')
 get_exoplanets :-
-    prop(P, hostname, _),
-    write(P).
+    prop(Planet, hostname, _),
+    write(Planet).
+
+is_habitable(P) :-
+    prop(P, is_in_zone, warm),
+    prop(P, has_composition, rocky),
+    prop(P, has_eccentricity, E),
+    prop(P, has_temp, T),
+    prop(P, has_stars_in_sys, N),
+    E > 0.00, T < 3500,  N is 1,
+    true.
+
 
 

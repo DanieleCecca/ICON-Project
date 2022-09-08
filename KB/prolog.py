@@ -11,7 +11,7 @@ def getExoplanets():
     myQuery = "prop(P, hostname, _)."
     planets = list(prolog.query(myQuery))
     for elem in planets:
-        queryPlanets = "> "+ elem["P"] +""
+        queryPlanets = "> "+ elem["P"] + ""
         print(queryPlanets)
 
         
@@ -19,7 +19,7 @@ def getExoplanets():
 def getExoplanetsHabitable():
 
     print("\nList of all the habitable exoplanets:")
-    myQuery = "prop(P ,is_habitable, true)."
+    myQuery = "prop(P ,is_habitable)."
     planets = list(prolog.query(myQuery))
     for elem in planets:
         queryPlanets = "> "+ elem["P"] +""
@@ -35,7 +35,7 @@ def getInfo(planet):
     
 #TO DO gestire gli errori
 # funzione per richiamare la query prolog che restituisce il valore della feuture indicata del pianeta dato
-def getfeatures(planet, feature):
+def getFeatures(planet, feature):
     
     verb = ""    
     property = feature.replace(" ", "_")
@@ -55,15 +55,17 @@ def getfeatures(planet, feature):
    
     elif(property == "planetary_system"):
         verb = "hostname"
-        myQuery = "prop(" + planet + ", " + verb + ", X)."
-        valueQuery = list(prolog.query(myQuery))
+        myQuery = "prop(" + planet + ", " + verb + ", X)."        
 
     else:
         verb = "has_" + property
         myQuery = "prop(" + planet + ", " + verb + ", X)."
  
-    valueQuery = list(prolog.query(myQuery))      
-    print(valueQuery) 
+    resultQuery = list(prolog.query(myQuery))      
+    for elem in resultQuery:
+        result = elem["X"]            
+        print("The chosen exoplanet for the feature '" + feature + "' has value: ")
+        print(result)
 
     
 #funzione che permette di aggiungere un pianeta
@@ -98,24 +100,33 @@ def addPlanet(planet,feature,value):
     
 #funzione che permette di determinare se un pianeta è abitabile e la classe di appartenenza
 def isHabitable(planet):
-    myQuery = "prop("+planet+", is_habitable, true)"    
-    if(myQuery):
+    myQuery = "prop("+planet+", is_habitable, X)"    
+    resultQuery = list(prolog.query(myQuery))     
+    for elem in resultQuery:
+        result = elem["X"]
+        print("The answer is " + result)
+    if(result == "true"):
         classQuery = "prop("+planet+", is_in_habitable_class, C)"
-        valueQuery = list(prolog.query(classQuery))    
-        print(valueQuery)
+        resultQuery = list(prolog.query(classQuery))        
+        for elem in resultQuery:
+            result = elem["C"]            
+            print("The chosen exoplanet is habitable and belongs to the class: " + result)
+            
 
 
 #funzione che richiama query prolog delel classificazione della massa
 def getMassClass(planet):
     myQuery = "prop("+planet+", is_mass_class, T)"
-    valueQuery = list(prolog.query(myQuery))
-    print(valueQuery)
+    resultQuery = list(prolog.query(myQuery))
+    for elem in resultQuery:
+        result = elem["C"]            
+        print("The chosen exoplanet is classified by mass as a: " + result)    
 
 
 # funzione per richiamare la query prolog che restituisce il valore della feuture indicata della stella data
-def getStarfeatures(planet, feature):
-    flag = False;
-    verb =""
+def getStarFeatures(planet, feature):
+    flag = False
+    verb = ""
     feature.strip()
 
     if(feature == "effectivetemperature"):
@@ -130,5 +141,8 @@ def getStarfeatures(planet, feature):
         verb = "his_star_is_class"
         myQuery = "prop(" + planet + ", " + verb + ", X)."
 
-    valueQuery = list(prolog.query(myQuery))    
-    print(valueQuery)    
+    resultQuery = list(prolog.query(myQuery))
+    for elem in resultQuery:
+        result = elem["X"]            
+        print("The metallicity of the chosen star is: " + result)    
+    
