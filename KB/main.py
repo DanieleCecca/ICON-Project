@@ -3,11 +3,9 @@ import menu
     
 if __name__ == '__main__':
    menu.menu()
-    
-    
 
-    
-#comandi principali meu
+
+#comandi principali menu
 
 #1Lista pianeti
     #dato un pianeta puoi inferenziare su tutte le caratteristiche oppure chiedere una descizione completa oppure exit tra cui l'hostname

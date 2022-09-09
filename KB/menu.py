@@ -2,19 +2,17 @@ from math import fabs
 import prolog as pl
 
 
-def menu():
-    while(True):
+def menu():    
     
-        print("Commands: press u cazz ca ue per uscire"
-            +"\n1)visualize exo-planets list"
-            +"\n2)visualize habitable exo-planets list"
-            +"\n3)add new exoplanet"
-            +"\n4)Search planet"
-            +"\n5)Check if planet is habitable")
-                
-            #indovina pianeta abitabile
-
-        command = input()
+        print("\nCommands: press 'e' to esc"
+            +"\n1) Visualize exoplanets list"
+            +"\n2) Visualize habitable exoplanets list"
+            +"\n3) Search planet"
+            +"\n4) Add new exoplanet" 
+            +"\n5) Check if an exoplanet is habitable")                
+               #6)indovina pianeta abitabile
+        
+        command = input("\n> ")
         if(command == "1"):
             pl.getExoplanets()
             subMenuPlanet()
@@ -25,66 +23,55 @@ def menu():
             subMenuPlanet() 
         elif(command == "4"):
             menuAddingPlanet()
-        elif(command == "5"):
-            print("Insert planet name:")
-            planet = input()
+        elif(command == "5"):          
+            planet = input("\nEnter exoplanet name:\n")
             pl.isHabitable(planet)
         else:
             return
-        
-        
-        
-    
-
 
 def subMenuPlanet():
     
-    print("Press e to escape\n"
-          + "d to get a description of a chosen planet\n"
-          + "f to get information about a feauture of a chosen planet")
+    print("\nPress 'e' to escape\n"
+          + "'d' to get a description of a chosen planet\n"
+          + "'f' to get information about a feature of a chosen planet")
     
-    command = input()
+    command = input("\n> ")
     
-    if(command=='e'):
+    if(command == 'e'):
         return
     else:
-        print("Insert planet name:")
-        planet = input()
+        planet = input("\nEnter exoplanet name: ")
         
         if(command == 'd'):
             pl.getInfo(planet)
             
         elif(command == 'f'):
-            printPlanetFeautures()
-            print("\nInsert feauture : ")
-            feauture = input()
-            pl.getFeautures(planet, feauture)
-            if(feauture=="p"):
+            printPlanetFeatures()            
+            feature = input("\nEnter feature: ")
+            pl.getFeatures(planet, feature)
+            if(feature == "p"):
                 subMenuStar(planet)
         
 
-def menuAddingPlanet():
+def menuAddingPlanet():    
     
-    print("Insert new exoplanet name:")
-    planet = input()
+    planet = input("\nEnter the name of the new exoplanet:")
     
     exit=False
     while(exit !=True):
-        print("Chose the feauture to insert or press 'e' to escape:")
-        printPlanetFeautures()
-        feauture = input()
-        if(feauture == "e"):           
+        print("Choose the feature to enter or press 'e' to escape:")
+        printPlanetFeatures()
+        feature = input("> ")
+        if(feature == "e"):           
             flag = True
-            break
-            
-        else:
-            print("Insert value:")
-            value = input()
-        
-            pl.addPlanet(planet,feauture,value)
+            break            
+        else:         
+            value = input("\nEnter value: ")        
+            pl.addPlanet(planet,feature,value)
+
     
-def printPlanetFeautures():
-    print("Feautures:"
+def printPlanetFeatures():
+    print("\nFeatures:"
           +"\n- radius"
           +"\n- mass"
           +"\n- density"
@@ -96,31 +83,26 @@ def printPlanetFeautures():
           +"\n- orbit period"
           +"\n- eccentricity"
           +"\n- discovery year"
-          +"\n- planetary system")
-    
+          +"\n- planetary system")  
 
 
 def subMenuStar(planet):
     
     print("Press e to escape\n"
-          + "f to get information about a feauture of a chosen star")
+          + "f to get information about a feature of a chosen star")
     
     command = input()
     
-    if(command=='e'):
+    if(command == 'e'):
         return   
     elif(command == 'f'):
-        printStarFeautures()
-        print("\nInsert feauture : ")
-        feauture = input()
-        pl.getStarFeautures(planet, feauture)
+        printStarFeatures()       
+        feature = input("\nEnter feature: ")
+        pl.getStarFeatures(planet, feature)
 
 
-def printStarFeautures():
-    print("Feautures:"
+def printStarFeatures():
+    print("Features of the star:"
           +"\n- metallicity"
           +"\n- effective temperature"
-          +"\n- spectral classification")   
-    
-    
-    
+          +"\n- spectral classification")       
