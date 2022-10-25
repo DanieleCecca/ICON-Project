@@ -1,0 +1,165 @@
+%DEFINIZIONE DELLE CLASSI
+% classe come LISTA di Liste di coppie(attr,val): classe <== [cong1 OR
+% cong2 OR...OR congn] congiunzione di coppie (attributo, valore): Forma
+% Normale Disgiuntiva
+
+mynumlist(Start, End, List) :-
+    mynumlisthelper(Start, End, [], List).
+
+mynumlisthelper(Start, End, Acc, Acc) :-
+    End < Start.
+
+mynumlisthelper(Start, End, Acc, List) :-
+    End >= Start,
+    DecEnd is End-1,
+    mynumlisthelper(Start, DecEnd, [End|Acc], List).
+
+%FEATURES: attributo(nome, valore)
+
+attributo(radius, mynumlist(1, 20, RadiusList)).
+attributo(mass, mynumlist(1, 350, MassList)).
+attributo(density, mynumlist(0, 3, DensityList)).
+attributo(gravity, mynumlist(1, 4, GravList)).
+attributo(eq_temp, mynumlist(150, 1800, TempList)).
+attributo(composition, [gas, water_gas, rocky_water, rocky_iron]).
+attributo(atmosphere, [hydrogen_rich, metals_rich]).
+attributo(eccentricity, mynumlist(0,2,EccList)).
+attributo(orbit_period, mynumlist(1, 40, OrbitPList)).
+attributo(hab_zone_distance, mynumlist(-3, 2, HZDList)).
+attributo(num_stars, [0,1,2,3,4,5,6,7,8]).
+attributo(metallicity, mynumlist(-1, 1)).
+attributo(star_temp, mynumlist(2000,6000, StarTempList)).
+
+%ESEMPI TRAINING
+
+%k2_18_b
+esempio(mesoplanet, [radius = 2.24, mass = 16.46, density = 1.46,gravity = 3.28, eq_temp = 249.8, composition = rocky_iron, atmosphere = hydrogen_rich, eccentricity = 0.2, orbit_period = 33.34, hab_zone_distance = -0.12, num_stars = 1, metallicity = 0.12, star_temp = 3503]).
+
+%k2_10_b
+esempio(non_habitable, [radius = 4.24, mass = 27, density = 0.48, gravity = 2.23, eq_temp =  558.8, composition = water_gas, atmosphere = metals_rich, eccentricity = 0.31, orbit_period = 19.30, hab_zone_distance = -2.17, num_stars = 1, metallicity = -0.07, star_temp = 5620]).
+
+%trappist_1f
+esempio(psychroplanet, [radius = 1.04, mass = 1.07, density = 0.59, gravity = 1.01, eq_temp =  199.7, composition = rocky_water, atmosphere = metals_rich, eccentricity = 1.03, orbit_period = 9.21, hab_zone_distance = 0.14, num_stars = 1, metallicity = 0.04, star_temp = 2550]).
+
+%trappist_1b
+esempio(non_habitable, [radius = 1.09, mass = 1.26, density = 1.07, gravity = 1.13, eq_temp =  364.9, composition = rocky_water, atmosphere = metals_rich, eccentricity = 0, orbit_period = 1.51, hab_zone_distance = -1.48, num_stars = 1, metallicity = 0.04, star_temp = 2550]).
+
+%k2_139_b
+esempio(non_habitable,[radius = 9.09, mass = 121.14, density = 0.16, gravity = 1.46, eq_temp = 508.0, composition = gas, atmosphere = hydrogen_rich, eccentricity = 0.12, orbit_period = 28.38, hab_zone_distance = -2.37, num_stars = 1, metallicity = 0.23, star_temp = 5287]).
+
+%k2_110_b
+esempio(non_habitable,[radius = 2.59, mass = 17.09, density = 1.36, gravity = 2.49, eq_temp = 583.5, composition = rocky_water, atmosphere = metals_rich, eccentricity = 0.08, orbit_period = 14.26, hab_zone_distance = -2.07, num_stars = 1, metallicity = -0.3, star_temp = 5010]).
+
+%wasp_118_b
+esempio(non_habitable,[radius = 15.13, mass = 163.42, density = 0.04, gravity = 1.03, eq_temp = 1576.2, composition = gas, atmosphere = metals_rich, eccentricity = 0, orbit_period = 4.05, hab_zone_distance = -2.46, num_stars = 1, metallicity = 0.16, star_temp = 6410]).
+
+%ross_128_b
+esempio(mesoplanet, [radius = 1.15, mass = 1.4, density = 1.31, gravity = 1.05, eq_temp = 280, composition = rocky_iron, atmosphere = metals_rich, eccentricity = 0.12, orbit_period = 10.27, hab_zone_distance = -1.39, num_stars = 1, metallicity = -0.02, star_temp = 3192]).
+
+
+
+
+
+
+
+:- op(300,xfx,<==).
+
+classifica(Oggetto, Classe) :- %object: lista coppie (attr,valore)
+    Classe<==Descrizione, %prende la desc della classe, la lista delle liste
+    member(CongiunzioneAttributi, Descrizione),
+    soddisfa(Oggetto, CongiunzioneAttributi). %AttrConj: lista delle coppie (attr,val), quindi una singola lista all'interno della lista delle liste della Description della Class
+
+soddisfa(Oggetto,Congiunzione) :- %nella lista passata al 2° argomento (quindi una congiunzione di coppie (attr,val))...
+    \+ (member(Att = Valx, Congiunzione),%..(NON) c'è una coppia formata da un attributo il cui valore è differente rispetto al..
+        member(Att = Valy, Oggetto),%..valore che ha il medesimo attributo nella lista di object
+        Valx \== Valy). %i due valori sono differenti
+
+
+% qst fnzn apprende le regole per una data classe:
+% 1)raccoglie il training set in una lista
+% 2)costruisce e manda in output una descrizione per la
+%   classe
+% 3)asserisce la corrispondente regola (la apprende)
+apprendi(Classe) :-
+    bagof(esempio(C,O), esempio(C,O), Esempi), %accogghj gli esempi in una lista
+    apprendi(Esempi, Classe, Descrizione), %induce la regola (crea la description che corrisponde alla classe passata in input in relazione agli esempi raccolti dal training set
+    nl, write(Classe), write(' <=='),nl, %stampa la regola
+    write(Descrizione),
+    assert(Classe<==Descrizione). %asserisce regola (associa a quella classe la description costruita
+
+% per coprire tutti gli oggetti della Classe in Examples:
+apprendi(Esempi, Classe, []) :-  % SE nessun esempio in Examples appartiene alla Classe allora Descrizione = []..
+    \+ member(esempio(Classe, _), Esempi). %.. (vuota, tutti gli esempi sono coperti, non dobbiamo più aggiungere alcuna descrizione)
+
+% [Conge] è una lista di congiunzioni di coppie (attr, val) che copre
+% almeno un esempio positivo per la Classe e nessuno negativo (cioè di un'altra classe)
+% [Congi] si ottiene rimuovendo da Examples quelli
+% coperti da Congie e coprendo i rimanenti oggetti di Classe in Esempi
+apprendi(Esempi, Classe, [Conge|Congi]) :- %ALTIMENTI Descrizione = [Conge|Congi], una lista di liste
+    apprendi_cong(Esempi, Classe, Conge), % funzione che apprende una possibile congiunzione di coppie (attr, val) per Class
+    rimuovi(Esempi, Conge, RestoEsempi), %rimuove esempi utilizzati che soddisfano la congiunzione
+    apprendi(RestoEsempi, Classe, Congi). %copre esempi rimasti
+
+% [Cong] è una lista di valori di attributi soddisfatti da almeno un
+% esempio positivo per tale Classe e da nessuno negativo
+apprendi_cong(Esempi, Classe, []) :-
+    \+ (member(esempio(ClasseX, _), Esempi), %da Examples prendiamo un esempio di una classe diversa da quella di interesse
+        ClasseX \== Classe),!. %quindi se non ci sono più esempi di altre classi si passa al learn_cong successivo
+
+apprendi_cong(Esempi, Classe, [Cond|Conds]) :- % specifica della singola congiunzione al terzo argomento
+    scegli_cond(Esempi, Classe, Cond), %sceglie la condizione Cond, congiunzione di coppie (attributo, valore)
+    filtra(Esempi, [Cond], Esempi1), % Examples1: esempi che soddisfano Cond
+    apprendi_cong(Esempi1, Classe, Conds).
+
+% come viene scelta Cond di filtering?
+% utilizziamo un' EURISTICA per ridurre l'elevata combinatorietà del programma
+scegli_cond(Esempi, Classe, AttVal) :-
+    findall(AV/Punti, punti(Esempi, Classe, AV, Punti), AVs), % cerca le coppie (attr,val) candidate e le ordina in base ad un punteggio che li viene assegnato (da un euristica)
+    best(AVs, AttVal). %trova la coppia con il miglior punteggio
+
+best([AttVal/_],AttVal).
+best([AV0/S0,AV1/S1|AVSlist],AttVal) :-
+    S1 > S0, !,
+    best([AV1/S1|AVSlist], AttVal);
+    best([AV0/S0|AVSlist], AttVal).
+
+filtra(Esempi, Cond, Esempi1) :-
+    findall(esempio(Classe,Ogg),
+            (member(esempio(Classe,Ogg),Esempi), soddisfa(Ogg, Cond)),
+            Esempi1).
+
+rimuovi([],_,[]).
+rimuovi([esempio(_,Ogg)|Es], Conge, Es1) :-
+    soddisfa(Ogg, Conge), !, %il primo es matcha conge
+    rimuovi(Es, Conge, Es1). %lo rimuove
+
+rimuovi([E|Es], Conge, [E|Es1]) :-
+    rimuovi(Es, Conge, Es1).
+
+% va a cercare una coppia (attr,val) candidata a far parte della
+% congiunzione per la Description della Classe
+punti(Esempi, Classe, AttVal, Punti) :-
+    candidato(Esempi, Classe, AttVal), %un attributo/val adatto
+    filtra(Esempi, [AttVal], Esempi1), %Examples1 lista che contiene solo esempi che soddisfano la condizione Feature = Val (es. tutti quelli che hanno composition = rocky)
+    length(Esempi1, N1), %N1 lunghezza della lista Examples 1
+    conta_pos(Esempi1, Classe, Npos1), %contiamo num esempi positivi (di quella Classe): Npos1
+    Npos1 > 0,                           %almeno uno positivo
+    Punti is (Npos1 + 1) / (N1 + 2). %CORREZIONE DI LAPLACE: num esempi di Classe + 1 / num esempi rimasti + 2
+
+% un candidato possibile
+candidato(Esempi,Classe,Att = Val) :-
+    attributo(Att, Valori), %prendiamo un attributo qualunque
+    member(Val, Valori), % e ne prendiamo i possibili valori
+    adatto(Att = Val, Esempi, Classe). %controlliamo se Feature = Val (es. num_stars = 2) è adatto per far parte
+                                            % della congiunzione delle coppie (attr, val) che potrebbe formare la Description che caratterizza la Classe
+
+adatto(AttVal, Esempi, Classe) :-
+    member(esempio(ClasseX, OggX), Esempi), %cerchiamo almeno un esempio negativo che deve non matchare con FeatureVal
+    ClasseX \== Classe, %esempio negativo..
+    \+ soddisfa(OggX, [AttVal]),!. %..che non matcha (FeatureVal è del tipo Feature = Val es. num_stars = 2)
+
+conta_pos([],_,0).
+conta_pos([esempio(ClasseX,_)|Esempi],Classe,N) :-
+    conta_pos(Esempi, Classe, N1),
+    (ClasseX = Classe, !, N is N1+1; N=N1).
+
