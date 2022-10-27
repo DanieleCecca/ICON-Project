@@ -10,7 +10,8 @@ def menu():
             +"\n2) Visualize habitable exoplanets list"
             +"\n3) Search planet"
             +"\n4) Add new exoplanet"  #to do forzare l'inserimento di tutte le feautures
-            +"\n5) Check if an exoplanet is habitable")                
+            +"\n5) Check if an exoplanet is habitable"       
+            +"\n6) Use induction to classify a planet")            
         
         command = input("\n> ")
         if(command == "1"):
@@ -27,6 +28,7 @@ def menu():
             planet = input("\nEnter exoplanet name:\n")
             pl.isHabitable(planet)
         elif(command == "6" ):
+            classificationMenu()
             #far partire la classificazione
             #stampare le regole indotte
             #inserire pianeta da classificare
@@ -114,7 +116,7 @@ def printStarFeatures():
     
 ##########################################################################################################################    
 
-def ClassificationMenu():
+def classificationMenu():
     print("Enter example to classify: ")
     radius = input(" -enter radius : ",)
     mass = input(" -enter mass : ",)
@@ -130,7 +132,7 @@ def ClassificationMenu():
     met = input(" -enter star metallicity : ",)
     sTemp = input(" -enter star temp : ",)
     
-    massRadius = pl.getMassRadiusClass(mass, radius)
+    #massRadius = pl.getMassRadiusClass(mass, radius) #TODO AGgiustuarea
     density = pl.getDensityClass(density)
     gravity = pl.getGravityClass(gravity)
     eqTemp = pl.getETempClass(eqTemp)
@@ -139,11 +141,12 @@ def ClassificationMenu():
     hzd = pl.getHZDClass(hzd)
     met = pl.getMetallicityClass(met)
     sTemp = pl.getStarTempClass(sTemp)
-    
-    features = "[[massRadius = "+ massRadius +" , density = "+ density +", gravity = "+gravity
-    +", eqtemp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere
-    +", ecc = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd
-    +", num_stars = "+nStars+" ,metallicity = "+met+", star_temp_class = "+sTemp+"]]"
+
+        
+    features = "[[massRadius = terran , density = "+ density +" , gravity = "+gravity
+    +" , eqtemp = "+eqTemp+" , composition = "+composition+" , atmosphere = "+atmosphere
+    +" , ecc = "+eccentricity+" , orbit_period_days = "+oPeriod+" , zone_class = "+hzd
+    +" , num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]]"
     
     pl.learn()
     pl.classify(features)

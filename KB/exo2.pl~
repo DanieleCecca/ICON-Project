@@ -336,7 +336,7 @@ prop(D, density_is_class, medium) :-
     D >= 1, D < 2.
 
 prop(D, density_is_class, high) :-
-    D >= 2.
+    D > 2.
 
 % gravity classification
 prop(G, gravity_is_class, weak) :-
@@ -386,7 +386,7 @@ prop(OP, operiod__is_class, a_lot) :-
 prop(MS, metallicity_is_class, low) :-
     MS =< 0.
 
-prop(MS, metallicity_is_class, medium) :-
+prop(MS, metallicity_class_is, medium) :-
     MS > 0.
 
 % description
@@ -528,7 +528,7 @@ esempio(non_habitable,[radius = medium, mass_class = jovian, density = low, grav
 
 % ------------------------------------------------------------------------
 
-:- op(300,xfx, <==).
+:- op(300,xfx,<==).
 
 classifica(Oggetto, Classe) :- %object: lista coppie (attr,valore)
     Classe<==Descrizione, %prende la desc della classe, la lista delle liste
