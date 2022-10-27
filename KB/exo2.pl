@@ -269,25 +269,6 @@ prop(P, has_volume, V) :-
     V is M/D,
     write('(mass is in Earth Unit)').
 
-% mass classification
-prop(P, is_mass_class, T):-
-    prop(P, has_mass, M),
-    prop(M, defines, T).
-
-prop(M, defines, terran) :-
-    M > 0.5, M < 2.
-
-prop(M, defines, superterran) :-
-    M > 2, M < 10.
-
-prop(M, defines, neptunian) :-
-    M > 10, M < 50.
-
-prop(M, defines, jovian) :-
-    prop(P, has_mass, M),
-    prop(P, has_composition, gas),
-    M > 50, M < 5000.
-
 % spectral classification [star]
 prop(P, his_star_is_class, C) :-
     prop(P, his_star_has_temp, T),
@@ -320,6 +301,117 @@ prop(D, implies, warm) :-
 prop(P, has_composition, rocky) :-
     prop(P, has_composition, rocky_iron);
     prop(P, has_composition, rocky_water).
+
+
+% mass-radius classification
+prop(P, is_mass_class, T):-
+    prop(P, has_mass, M),
+    prop(P, has_radius, R).
+    prop([M,R], defines, T).
+
+prop([M,R], defines, terran) :-
+    M > 0.5, M < 2,
+    R > 0.8, R < 1,9.
+
+prop(M, defines, superterran) :-
+    M > 2, M < 10,
+    R > 1.3, R < 3,3.
+
+prop(M, defines, neptunian) :-
+    M > 10, M < 50,
+    R > 2.1, R < 5.7.
+
+prop(M, defines, jovian) :-
+    prop(P, has_mass, M),
+    prop(P, has_composition, gas),
+    M > 50, M < 5000,
+    R > 0.8, R < 1,9.
+
+
+% density classification
+prop(P, is_density_class, T):-
+    prop(P, has_density, D),
+    prop(P, defines, T).
+
+prop(D, defines, low) :-
+    D < 1.
+
+prop(D, defines, medium) :-
+    D >= 1, D < 2.
+
+prop(D, defines, high) :-
+    D > 2
+
+% gravity classification
+prop(P, is_gravity_class, T):-
+    prop(P, has_gravity, G),
+    prop(P, defines, T).
+
+prop(G, defines, weak) :-
+    G >= 1, G <= 1.5.
+
+prop(G, defines, medium) :-
+    G > 1.5, G <= 2.5.
+
+prop(G, defines, strong) :-
+    G > 2.5.
+
+% eq_temp classification
+prop(P, is_temp_class, T):-
+    prop(P, has_temp, ET),
+    prop(P, defines, T).
+
+prop(ET, defines, acceptable) :-
+    ET <= 300.
+
+prop(ET, defines, too_high) :-
+    ET > 300, ET < 1000.
+
+prop(ET, defines, too_much_high) :-
+    ET >= 1000.
+
+% eccentricity classification
+prop(P, is_eccentricity_class, T):-
+    prop(P, has_eccentricity, ECC),
+    prop(P, defines, T).
+
+prop(ECC, defines, circular) :-
+    ECC = 0.
+
+prop(ECC, defines, elliptic) :-
+    ECC > 0, ECC < 1.
+
+prop(ECC, defines, parabolic) :-
+    ECC = 1.
+
+prop(ECC, defines, hyperbolic) :-
+    ECC > 1.    
+
+
+% orbit-perios classification
+prop(P, is_operiod_class, T):-
+    prop(P, has_orbit_period, OP),
+    prop(P, defines, T).
+
+prop(OP, defines, few) :-
+    OP <=10.
+
+prop(OP, defines, many) :-
+    OP > 10, OP <= 20.
+
+prop(OP, defines, a_lot) :-
+    OP > 20
+
+% metallicity classification
+prop(P, is_metallicity_class, T):-
+    prop(P, his_star_has_met, MS),
+    prop(P, defines, T).
+
+prop(MS, defines, low) :-
+    MS <= 0.
+
+prop(MS, defines, medium) :-
+    MS > 0
 
 % description
 get_info_about(Planet) :-
@@ -467,8 +559,8 @@ classifica(Oggetto, Classe) :- %object: lista coppie (attr,valore)
     member(CongiunzioneAttributi, Descrizione),
     soddisfa(Oggetto, CongiunzioneAttributi). %AttrConj: lista delle coppie (attr,val), quindi una singola lista all'interno della lista delle liste della Description della Class
 
-soddisfa(Oggetto,Congiunzione) :- %nella lista passata al 2° argomento (quindi una congiunzione di coppie (attr,val))...
-    \+ (member(Att = Valx, Congiunzione),%..(NON) c'è una coppia formata da un attributo il cui valore è differente rispetto al..
+soddisfa(Oggetto,Congiunzione) :- %nella lista passata al 2ï¿½ argomento (quindi una congiunzione di coppie (attr,val))...
+    \+ (member(Att = Valx, Congiunzione),%..(NON) c'ï¿½ una coppia formata da un attributo il cui valore ï¿½ differente rispetto al..
         member(Att = Valy, Oggetto),%..valore che ha il medesimo attributo nella lista di object
         Valx \== Valy). %i due valori sono differenti
 
@@ -487,10 +579,10 @@ apprendi(Classe) :-
 
 % per coprire tutti gli oggetti della Classe in Examples:
 apprendi(Esempi, Classe, []) :-  % SE nessun esempio in Examples appartiene alla Classe allora Descrizione = []..
-    \+ member(esempio(Classe, _), Esempi). %.. (vuota, tutti gli esempi sono coperti, non dobbiamo più aggiungere alcuna descrizione)
+    \+ member(esempio(Classe, _), Esempi). %.. (vuota, tutti gli esempi sono coperti, non dobbiamo piï¿½ aggiungere alcuna descrizione)
 
-% [Conge] è una lista di congiunzioni di coppie (attr, val) che copre
-% almeno un esempio positivo per la Classe e nessuno negativo (cioè di un'altra classe)
+% [Conge] ï¿½ una lista di congiunzioni di coppie (attr, val) che copre
+% almeno un esempio positivo per la Classe e nessuno negativo (cioï¿½ di un'altra classe)
 % [Congi] si ottiene rimuovendo da Examples quelli
 % coperti da Congie e coprendo i rimanenti oggetti di Classe in Esempi
 apprendi(Esempi, Classe, [Conge|Congi]) :- %ALTIMENTI Descrizione = [Conge|Congi], una lista di liste
@@ -498,11 +590,11 @@ apprendi(Esempi, Classe, [Conge|Congi]) :- %ALTIMENTI Descrizione = [Conge|Congi
     rimuovi(Esempi, Conge, RestoEsempi), %rimuove esempi utilizzati che soddisfano la congiunzione
     apprendi(RestoEsempi, Classe, Congi). %copre esempi rimasti
 
-% [Cong] è una lista di valori di attributi soddisfatti da almeno un
+% [Cong] ï¿½ una lista di valori di attributi soddisfatti da almeno un
 % esempio positivo per tale Classe e da nessuno negativo
 apprendi_cong(Esempi, Classe, []) :-
     \+ (member(esempio(ClasseX, _), Esempi), %da Examples prendiamo un esempio di una classe diversa da quella di interesse
-        ClasseX \== Classe),!. %quindi se non ci sono più esempi di altre classi si passa al learn_cong successivo
+        ClasseX \== Classe),!. %quindi se non ci sono piï¿½ esempi di altre classi si passa al learn_cong successivo
 
 apprendi_cong(Esempi, Classe, [Cond|Conds]) :- % specifica della singola congiunzione al terzo argomento
     scegli_cond(Esempi, Classe, Cond), %sceglie la condizione Cond, congiunzione di coppie (attributo, valore)
@@ -510,7 +602,7 @@ apprendi_cong(Esempi, Classe, [Cond|Conds]) :- % specifica della singola congiun
     apprendi_cong(Esempi1, Classe, Conds).
 
 % come viene scelta Cond di filtering?
-% utilizziamo un' EURISTICA per ridurre l'elevata combinatorietà del programma
+% utilizziamo un' EURISTICA per ridurre l'elevata combinatorietï¿½ del programma
 scegli_cond(Esempi, Classe, AttVal) :-
     findall(AV/Punti, punti(Esempi, Classe, AV, Punti), AVs), % cerca le coppie (attr,val) candidate e le ordina in base ad un punteggio che li viene assegnato (da un euristica)
     best(AVs, AttVal). %trova la coppia con il miglior punteggio
@@ -548,13 +640,13 @@ punti(Esempi, Classe, AttVal, Punti) :-
 candidato(Esempi,Classe,Att = Val) :-
     attributo(Att, Valori), %prendiamo un attributo qualunque
     member(Val, Valori), % e ne prendiamo i possibili valori
-    adatto(Att = Val, Esempi, Classe). %controlliamo se Feature = Val (es. num_stars = 2) è adatto per far parte
+    adatto(Att = Val, Esempi, Classe). %controlliamo se Feature = Val (es. num_stars = 2) ï¿½ adatto per far parte
                                             % della congiunzione delle coppie (attr, val) che potrebbe formare la Description che caratterizza la Classe
 
 adatto(AttVal, Esempi, Classe) :-
     member(esempio(ClasseX, OggX), Esempi), %cerchiamo almeno un esempio negativo che deve non matchare con FeatureVal
     ClasseX \== Classe, %esempio negativo..
-    \+ soddisfa(OggX, [AttVal]),!. %..che non matcha (FeatureVal è del tipo Feature = Val es. num_stars = 2)
+    \+ soddisfa(OggX, [AttVal]),!. %..che non matcha (FeatureVal ï¿½ del tipo Feature = Val es. num_stars = 2)
 
 conta_pos([],_,0).
 conta_pos([esempio(ClasseX,_)|Esempi],Classe,N) :-

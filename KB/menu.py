@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import OP
 from math import fabs
 import prolog as pl
 
@@ -8,9 +9,8 @@ def menu():
             +"\n1) Visualize exoplanets list"
             +"\n2) Visualize habitable exoplanets list"
             +"\n3) Search planet"
-            +"\n4) Add new exoplanet" 
+            +"\n4) Add new exoplanet"  #to do forzare l'inserimento di tutte le feautures
             +"\n5) Check if an exoplanet is habitable")                
-               #6)indovina pianeta abitabile
         
         command = input("\n> ")
         if(command == "1"):
@@ -23,9 +23,14 @@ def menu():
             subMenuPlanet() 
         elif(command == "4"):
             menuAddingPlanet()
-        elif(command == "5"):          
+        elif(command == "5"):  #tramite regola        
             planet = input("\nEnter exoplanet name:\n")
             pl.isHabitable(planet)
+        elif(command == "6" ):
+            #far partire la classificazione
+            #stampare le regole indotte
+            #inserire pianeta da classificare
+            #tramite induzione delle classi
         else:
             return
 
@@ -105,4 +110,43 @@ def printStarFeatures():
     print("Features of the star:"
           +"\n- metallicity"
           +"\n- effective temperature"
-          +"\n- spectral classification")       
+          +"\n- spectral classification")   
+    
+##########################################################################################################################    
+
+def ClassificationMenu():
+    print("Enter example to classify: ")
+    radius = input(" -enter radius : ",)
+    mass = input(" -enter mass : ",)
+    density = input(" -enter density : ",)
+    gravity = input(" -enter gravity: ",)
+    eqTemp = input(" -enter eq temperature : ",)
+    composition = input(" -enter composition : ",)
+    atmosphere = input(" -enter atomsphere : ",)
+    eccentricity = input(" -enter eccentricity : ",)
+    oPeriod = input(" -enter orbit period : ",)
+    hzd = input(" -enter zone distance : ",)
+    nStars = input(" -enter number of stars : ",)
+    met = input(" -enter star metallicity : ",)
+    sTemp = input(" -enter star temp : ",)
+    
+    massRadius = pl.getMassRadiusClass(mass, radius)
+    density = pl.getDensityClass(density)
+    gravity = pl.getGravityClass(gravity)
+    eqTemp = pl.getETempClass(eqTemp)
+    eccentricity = pl.getEccClass(eccentricity)
+    oPeriod = pl.getOPeriodClass(oPeriod)
+    hzd = pl.getHZDClass(hzd)
+    met = pl.getMetallicityClass(met)
+    sTemp = pl.getStarTempClass(sTemp)
+    
+    features = "[[massRadius = "+ massRadius +" , density = "+ density +", gravity = "+gravity
+    +", eqtemp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere
+    +", ecc = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd
+    +", num_stars = "+nStars+" ,metallicity = "+met+", star_temp_class = "+sTemp+"]]"
+    
+    pl.learn()
+    pl.classify(features)
+    
+    
+          

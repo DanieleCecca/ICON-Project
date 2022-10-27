@@ -1,7 +1,10 @@
 from pyswip import Prolog
 
 prolog = Prolog()
-prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo.pl")
+prolog.consult("C:/Users/cecca/Desktop/ICON-Project/KB/exo.pl")
+
+prologILP= Prolog()
+prolog.consult("C:/Users/cecca/Desktop/ICON-Project/KB/exo2.pl")
 
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
@@ -144,5 +147,96 @@ def getStarFeatures(planet, feature):
     resultQuery = list(prolog.query(myQuery))
     for elem in resultQuery:
         result = elem["X"]            
-        print("The metallicity of the chosen star is: " + result)    
+        print("The metallicity of the chosen star is: " + result)  
+        
+#######################################################################################################################################################################
+
+# funzione per richiamare la funzione learning tramite algoritmo ILP(inductive logic programming)
+def learn():
+    myQuery = "apprendi(habitable)"
+    prologILP.query(myQuery)
+    
+    myQuery = "apprendi(non_habitable)"
+    prologILP.query(myQuery)
+
+# funzione per richiamare la funzione classify tramite algoritmo ILP(inductive logic programming) 
+def classify(example):
+    myQuery = "classifica(" + example +")"
+    prologILP.query(myQuery)
+    
+# funzione per richiamare una classe
+def getDensityClass(density):
+    myQuery = "prop("+density+", density_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+
+# funzione per richiamare una classe
+def getGravityClass(gravity):
+    myQuery = "prop("+gravity+", gravity_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result
+
+# funzione per richiamare una classe
+def getETempClass(eqTemp):
+    myQuery = "prop("+eqTemp+", temp_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result 
+        
+# funzione per richiamare una classe
+def getEccClass(eccentricity):
+    myQuery = "prop("+eccentricity+", eccentricity_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result
+
+
+# funzione per richiamare una classe
+def getOPeriodClass(operiod):
+    myQuery = "prop("+operiod+", operiod__is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result   
+
+# funzione per richiamare una classe
+def getMetallicityClass(metallicity):
+    myQuery = "prop("+metallicity+", metallicity_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result
+        
+# funzione per richiamare una classe
+def getMassRadiusClass(mass, radius):
+    myQuery = "prop("+[mass,radius]+", massRadius_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result
+
+# funzione per richiamare una classe
+def getHZDClass(operiod):
+    myQuery = "prop("+operiod+", habitability_is_class, C)"
+    resultQuery = list(prolog.query(myQuery))
+    result = resultQuery["C"]            
+    print(result)
+    return result 
+
+# funzione per richiamare una classe
+def getStarTempClass(starTemp):
+    myQuery = "prop("+starTemp+", starTemp_is_class, C)"
+    resultQuery = list(prolog.query(myQuery)) #prologilp
+    result = resultQuery["C"]            
+    print(result)
+    return result
+        
+        
+
+    
     

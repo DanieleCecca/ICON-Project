@@ -20,4 +20,4 @@ if __name__ == '__main__':
     
 #4aggiungi un pianeta
 
-#5dato un pianeta dire se questo è abitabile e la classe a cui appartiene
+
