@@ -75,7 +75,7 @@ def addPlanet(planet,feature,value):
     property = feature.replace(" ", "_")
     print(property)
 
-    if(feature == "equilibrium_temperature"):
+    if(property == "equilibrium_temperature"):
         verb = "has_temp"
         myQuery = "prop(" + planet + ", " + verb + ", " + value + " )"
 
@@ -83,12 +83,12 @@ def addPlanet(planet,feature,value):
         verb = "has_atmosphere"
         myQuery = "prop(" + planet + ", " + verb + ", " + value + " )"
         
-    elif(feature == "discovery_year"):
+    elif(property == "discovery_year"):
         verb = "was_discovered"
         myQuery = "prop(" + planet + ", " + verb + ", " + value + ")"
 
-    elif(feature == "hostname"):
-        verb = feature
+    elif(property == "planetary_system"):
+        verb = "hostname"
         myQuery = "prop(" + planet + ", " + verb + ", " + value + ")"
     
     else:
