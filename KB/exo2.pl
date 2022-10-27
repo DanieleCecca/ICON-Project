@@ -272,29 +272,29 @@ prop(P, has_volume, V) :-
 % spectral classification [star]
 prop(P, his_star_is_class, C) :-
     prop(P, his_star_has_temp, T),
-    prop(T, defines, C).
+    prop(T, starTemp_is_class, C).
 
-prop(T, defines, f) :-
+prop(T, starTemp_is_class, f) :-
     T > 6000, T < 7500.
 
-prop(T, defines, g)  :-
+prop(T, starTemp_is_class, g)  :-
     T > 5200, T < 6000.
 
-prop(T, defines, k) :-
+prop(T, starTemp_is_class, k) :-
     T > 3700, T < 5200.
 
-prop(T, defines, m) :-
+prop(T, starTemp_is_class, m) :-
     T > 2400, T < 3700.
 
 % zone classification (habitability)
 prop(P, is_in_zone, Z):-
     prop(P, distance_from_star, D),
-    prop(D, implies, Z).
+    prop(D, habitability_is_class, Z).
 
-prop(D, implies, hot) :-
+prop(D, habitability_is_class, hot) :-
     D < -1.40.
 
-prop(D, implies, warm) :-
+prop(D, habitability_is_class, warm) :-
     D > -1.40.
 
 % is an exoplanet made of rock?
@@ -307,110 +307,86 @@ prop(P, has_composition, rocky) :-
 prop(P, is_mass_class, T):-
     prop(P, has_mass, M),
     prop(P, has_radius, R).
-    prop([M,R], defines, T).
+    prop([M,R], massRadius_is_class, T). % defines
 
-prop([M,R], defines, terran) :-
+prop([M,R], massRadius_is_class, terran) :-
     M > 0.5, M < 2,
     R > 0.8, R < 1,9.
 
-prop(M, defines, superterran) :-
+prop(M, massRadius_is_class, superterran) :-
     M > 2, M < 10,
     R > 1.3, R < 3,3.
 
-prop(M, defines, neptunian) :-
+prop(M, massRadius_is_class, neptunian) :-
     M > 10, M < 50,
     R > 2.1, R < 5.7.
 
-prop(M, defines, jovian) :-
-    prop(P, has_mass, M),
-    prop(P, has_composition, gas),
+prop(M, massRadius_is_class, jovian) :-
+    % prop(P, has_mass, M),
+    % prop(P, has_composition, gas),
     M > 50, M < 5000,
     R > 0.8, R < 1,9.
 
 
 % density classification
-prop(P, is_density_class, T):-
-    prop(P, has_density, D),
-    prop(P, defines, T).
-
-prop(D, defines, low) :-
+prop(D, density_is_class, low) :-
     D < 1.
 
-prop(D, defines, medium) :-
+prop(D, density_is_class, medium) :-
     D >= 1, D < 2.
 
-prop(D, defines, high) :-
+prop(D, density_is_class, high) :-
     D > 2
 
 % gravity classification
-prop(P, is_gravity_class, T):-
-    prop(P, has_gravity, G),
-    prop(P, defines, T).
-
-prop(G, defines, weak) :-
+prop(G, gravity_is_class, weak) :-
     G >= 1, G <= 1.5.
 
-prop(G, defines, medium) :-
+prop(G, gravity_is_class, medium) :-
     G > 1.5, G <= 2.5.
 
-prop(G, defines, strong) :-
+prop(G, gravity_is_class, strong) :-
     G > 2.5.
 
 % eq_temp classification
-prop(P, is_temp_class, T):-
-    prop(P, has_temp, ET),
-    prop(P, defines, T).
-
-prop(ET, defines, acceptable) :-
+prop(ET, temp_is_class, acceptable) :-
     ET <= 300.
 
-prop(ET, defines, too_high) :-
+prop(ET, temp_is_class, too_high) :-
     ET > 300, ET < 1000.
 
-prop(ET, defines, too_much_high) :-
+prop(ET, temp_is_class, too_much_high) :-
     ET >= 1000.
 
-% eccentricity classification
-prop(P, is_eccentricity_class, T):-
-    prop(P, has_eccentricity, ECC),
-    prop(P, defines, T).
 
-prop(ECC, defines, circular) :-
+prop(ECC, eccentricity_is_class, circular) :-
     ECC = 0.
 
-prop(ECC, defines, elliptic) :-
+prop(ECC, eccentricity_is_class, elliptic) :-
     ECC > 0, ECC < 1.
 
-prop(ECC, defines, parabolic) :-
+prop(ECC, eccentricity_is_class, parabolic) :-
     ECC = 1.
 
-prop(ECC, defines, hyperbolic) :-
+prop(ECC, eccentricity_is_class, hyperbolic) :-
     ECC > 1.    
 
 
 % orbit-perios classification
-prop(P, is_operiod_class, T):-
-    prop(P, has_orbit_period, OP),
-    prop(P, defines, T).
-
-prop(OP, defines, few) :-
+prop(OP, operiod__is_class, few) :-
     OP <=10.
 
-prop(OP, defines, many) :-
+prop(OP, operiod__is_class, many) :-
     OP > 10, OP <= 20.
 
-prop(OP, defines, a_lot) :-
+prop(OP, operiod__is_class, a_lot) :-
     OP > 20
 
 % metallicity classification
-prop(P, is_metallicity_class, T):-
-    prop(P, his_star_has_met, MS),
-    prop(P, defines, T).
-
-prop(MS, defines, low) :-
+prop(MS, metallicity_is_class, low) :-
     MS <= 0.
 
-prop(MS, defines, medium) :-
+prop(MS, metallicity_class_is, medium) :-
     MS > 0
 
 % description
