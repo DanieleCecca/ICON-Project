@@ -274,6 +274,9 @@ prop(P, his_star_is_class, C) :-
     prop(P, his_star_has_temp, T),
     prop(T, starTemp_is_class, C).
 
+prop(T, starTemp_is_class, a) :-
+    T > 7500.
+
 prop(T, starTemp_is_class, f) :-
     T > 6000, T < 7500.
 
@@ -340,7 +343,7 @@ prop(D, density_is_class, high) :-
 
 % gravity classification
 prop(G, gravity_is_class, weak) :-
-    G >= 1, G < 1.5.
+    G >= 1, G =< 1.5.
 
 prop(G, gravity_is_class, medium) :-
     G > 1.5, G =< 2.5.
@@ -372,7 +375,7 @@ prop(ECC, eccentricity_is_class, hyperbolic) :-
     ECC > 1.
 
 
-% orbit-perios classification
+% orbit-period classification
 prop(OP, operiod__is_class, few) :-
     OP =< 10.
 

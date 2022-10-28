@@ -118,13 +118,13 @@ def printStarFeatures():
 
 def classificationMenu():
     print("Enter example to classify: ")
-    radius = input(" -enter radius : ",)
-    mass = input(" -enter mass : ",)
+    #radius = input(" -enter radius : ",)
+    #mass = input(" -enter mass : ",)
     density = input(" -enter density : ",)
     gravity = input(" -enter gravity: ",)
     eqTemp = input(" -enter eq temperature : ",)
     composition = input(" -enter composition : ",)
-    atmosphere = input(" -enter atomsphere : ",)
+    atmosphere = input(" -enter atmosphere : ",)
     eccentricity = input(" -enter eccentricity : ",)
     oPeriod = input(" -enter orbit period : ",)
     hzd = input(" -enter zone distance : ",)
@@ -141,13 +141,11 @@ def classificationMenu():
     hzd = pl.getHZDClass(hzd)
     met = pl.getMetallicityClass(met)
     sTemp = pl.getStarTempClass(sTemp)
-
         
-    features = "[[massRadius = terran , density = "+ density +" , gravity = "+gravity
-    +" , eqtemp = "+eqTemp+" , composition = "+composition+" , atmosphere = "+atmosphere
-    +" , ecc = "+eccentricity+" , orbit_period_days = "+oPeriod+" , zone_class = "+hzd
-    +" , num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]]"
-    
+    features = "[radius = small, mass_class = terran, density = "+ density +", gravity = "+gravity+",  eqtemp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
+    #TODO usare la Tecnica proibita del viaggiatore resiliente: auto-format dei fatti da dare in pasto all'algoritmo ILP, creando da 0 il fatto..
+    #..esempio(Classe, [attributo1 = valore, attr = valore, ...]) a partire da valori numerici utilizzando i mini classif. creati
+
     pl.learn()
     pl.classify(features)
     
