@@ -2,8 +2,10 @@ from lib2to3.pgen2.token import OP
 from math import fabs
 import prolog as pl
 
-
 def menu():    
+
+    flag = True
+    while(flag):
     
         print("\nCommands: press 'e' to esc"
             +"\n1) Visualize exoplanets list"
@@ -28,12 +30,16 @@ def menu():
             planet = input("\nEnter exoplanet name:\n")
             pl.isHabitable(planet)
         elif(command == "6" ):
+            pl.learnHab()
+            pl.learnNonHab()                      
+        elif(command == "7"):
             classificationMenu()
             #far partire la classificazione
             #stampare le regole indotte
             #inserire pianeta da classificare
             #tramite induzione delle classi
         else:
+            flag = False
             return
 
 def subMenuPlanet():
@@ -142,12 +148,12 @@ def classificationMenu():
     met = pl.getMetallicityClass(met)
     sTemp = pl.getStarTempClass(sTemp)
         
-    features = "[radius = small, mass_class = terran, density = "+ density +", gravity = "+gravity+",  eqtemp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
+    example = "[radius = large, mass_class = terran, density = "+ density +", gravity = "+gravity+",  eqtemp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
     #TODO usare la Tecnica proibita del viaggiatore resiliente: auto-format dei fatti da dare in pasto all'algoritmo ILP, creando da 0 il fatto..
     #..esempio(Classe, [attributo1 = valore, attr = valore, ...]) a partire da valori numerici utilizzando i mini classif. creati
+   
 
-    pl.learn()
-    pl.classify(features)
+    pl.classify(example)
     
     
           

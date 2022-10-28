@@ -147,12 +147,15 @@ def getStarFeatures(planet, feature):
 #######################################################################################################################################################################
 
 # funzione per richiamare la funzione learning tramite algoritmo ILP(inductive logic programming)
-def learn():
-    myQuery = "apprendi(habitable)"    
-    prolog.query(myQuery)
-    
+def learnHab():
     myQuery = "apprendi(non_habitable)"    
     prolog.query(myQuery)
+    rule1 = list(prolog.query(myQuery))
+
+def learnNonHab():    
+    myQuery = "apprendi(habitable)"    
+    prolog.query(myQuery)    
+    rule2 = list(prolog.query(myQuery))      
 
 # funzione per richiamare la funzione classify tramite algoritmo ILP (inductive logic programming) 
 def classify(example):
@@ -160,11 +163,10 @@ def classify(example):
     print(myQuery)
     prolog.query(myQuery)
     resultQuery = list(prolog.query(myQuery))
+    print(resultQuery)
     for elem in resultQuery:
-        result = elem["Classe"]            
-        print("The exoplanet entered belongs to the class: " + result)
-
-    
+       result = elem["Classe"]            
+       print("The exoplanet entered belongs to the class: " + result)    
     
 # funzione per richiamare una classe
 def getDensityClass(density):

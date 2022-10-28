@@ -278,10 +278,10 @@ prop(T, starTemp_is_class, a) :-
     T > 7500.
 
 prop(T, starTemp_is_class, f) :-
-    T > 6000, T < 7500.
+    T > 6000, T =< 7500.
 
 prop(T, starTemp_is_class, g)  :-
-    T > 5200, T < 6000.
+    T > 5200, T =< 6000.
 
 prop(T, starTemp_is_class, k) :-
     T > 3700, T < 5200.
