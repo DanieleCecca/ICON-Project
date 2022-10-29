@@ -274,11 +274,14 @@ prop(P, his_star_is_class, C) :-
     prop(P, his_star_has_temp, T),
     prop(T, starTemp_is_class, C).
 
+prop(T, starTemp_is_class, a) :-
+    T > 7500.
+
 prop(T, starTemp_is_class, f) :-
-    T > 6000, T < 7500.
+    T > 6000, T =< 7500.
 
 prop(T, starTemp_is_class, g)  :-
-    T > 5200, T < 6000.
+    T > 5200, T =< 6000.
 
 prop(T, starTemp_is_class, k) :-
     T > 3700, T < 5200.
@@ -336,11 +339,11 @@ prop(D, density_is_class, medium) :-
     D >= 1, D < 2.
 
 prop(D, density_is_class, high) :-
-    D > 2.
+    D >= 2.
 
 % gravity classification
 prop(G, gravity_is_class, weak) :-
-    G >= 1, G < 1.5.
+    G >= 1, G =< 1.5.
 
 prop(G, gravity_is_class, medium) :-
     G > 1.5, G =< 2.5.
@@ -372,7 +375,7 @@ prop(ECC, eccentricity_is_class, hyperbolic) :-
     ECC > 1.
 
 
-% orbit-perios classification
+% orbit-period classification
 prop(OP, operiod__is_class, few) :-
     OP =< 10.
 
@@ -386,7 +389,7 @@ prop(OP, operiod__is_class, a_lot) :-
 prop(MS, metallicity_is_class, low) :-
     MS =< 0.
 
-prop(MS, metallicity_class_is, medium) :-
+prop(MS, metallicity_is_class, medium) :-
     MS > 0.
 
 % description
@@ -452,6 +455,17 @@ esempio(non_habitable,[radius = small, mass_class = neptunian, density = medium,
 
 %wasp_118_b
 esempio(non_habitable,[radius = large, mass_class = jovian, density = medium, gravity = weak, eq_temp = too_much_high, composition = gas, atmosphere = metals_rich, eccentricity = circular, orbit_period_days = few, zone_class = hot, num_stars = 1, metallicity = medium, star_temp_class = f]).
+
+%wasp_118_b
+esempio(non_habitable,[radius = large, mass_class = jovian, density = medium, gravity = weak, eq_temp = too_much_high, composition = gas, atmosphere = metals_rich, eccentricity = circular, orbit_period_days = few, zone_class = hot, num_stars = 1, metallicity = medium, star_temp_class = f]).
+
+%wasp_118_b
+esempio(non_habitable,[radius = large, mass_class = jovian, density = medium, gravity = weak, eq_temp = too_much_high, composition = gas, atmosphere = metals_rich, eccentricity = circular, orbit_period_days = few, zone_class = hot, num_stars = 1, metallicity = medium, star_temp_class = m]).
+
+%wasp_118_b
+esempio(non_habitable,[radius = large, mass_class = jovian, density = medium, gravity = weak, eq_temp = too_much_high, composition = gas, atmosphere = metals_rich, eccentricity = circular, orbit_period_days = few, zone_class = hot, num_stars = 1, metallicity = medium, star_temp_class = k]).
+
+
 
 %ross_128_b (meso)
 esempio(habitable, [radius = small, mass_class = terran, density = medium, gravity = weak, eq_temp = acceptable, composition = rocky_iron, atmosphere = metals_rich, eccentricity = parabolic, orbit_period_days = many, zone_class = warm, num_stars = 1, metallicity = low, star_temp_class = m]).
@@ -528,7 +542,7 @@ esempio(non_habitable,[radius = medium, mass_class = jovian, density = low, grav
 
 % ------------------------------------------------------------------------
 
-:- op(300,xfx,<==).
+:- op(300,xfx, <==).
 
 classifica(Oggetto, Classe) :- %object: lista coppie (attr,valore)
     Classe<==Descrizione, %prende la desc della classe, la lista delle liste

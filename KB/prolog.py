@@ -1,7 +1,7 @@
 from pyswip import Prolog
 
 prolog = Prolog()
-prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo2.pl")
+prolog.consult("C:/Users/cecca/Desktop/ICON-Project/KB/exo2.pl")
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
 def getExoplanets():
@@ -163,10 +163,9 @@ def classify(example):
     print(myQuery)
     prolog.query(myQuery)
     resultQuery = list(prolog.query(myQuery))
-    print(resultQuery)
     for elem in resultQuery:
        result = elem["Classe"]            
-       print("The exoplanet entered belongs to the class: " + result)    
+    print("The exoplanet entered belongs to the class: " + result)    
     
 # funzione per richiamare una classe
 def getDensityClass(density):
@@ -225,7 +224,8 @@ def getMetallicityClass(metallicity):
         
 # funzione per richiamare una classe
 def getMassRadiusClass(mass, radius):
-    myQuery = "prop("+[mass,radius]+", massRadius_is_class, C)"
+    myQuery = "prop("+"["+mass+"|"+radius+"]"+", massRadius_is_class, C)"
+    print(myQuery)
     resultQuery = list(prolog.query(myQuery))
     for elem in resultQuery:
         result = elem["C"]                 

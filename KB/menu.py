@@ -1,3 +1,4 @@
+from doctest import Example
 from lib2to3.pgen2.token import OP
 from math import fabs
 import prolog as pl
@@ -124,8 +125,8 @@ def printStarFeatures():
 
 def classificationMenu():
     print("Enter example to classify: ")
-    #radius = input(" -enter radius : ",)
-    #mass = input(" -enter mass : ",)
+    radius = input(" -enter radius : ",)
+    mass = input(" -enter mass : ",)
     density = input(" -enter density : ",)
     gravity = input(" -enter gravity: ",)
     eqTemp = input(" -enter eq temperature : ",)
@@ -138,7 +139,7 @@ def classificationMenu():
     met = input(" -enter star metallicity : ",)
     sTemp = input(" -enter star temp : ",)
     
-    #massRadius = pl.getMassRadiusClass(mass, radius) #TODO AGgiustuarea
+    massRadius = pl.getMassRadiusClass(mass, radius) #TODO AGgiustuarea
     density = pl.getDensityClass(density)
     gravity = pl.getGravityClass(gravity)
     eqTemp = pl.getETempClass(eqTemp)
@@ -148,11 +149,11 @@ def classificationMenu():
     met = pl.getMetallicityClass(met)
     sTemp = pl.getStarTempClass(sTemp)
         
-    example = "[radius = large, mass_class = terran, density = "+ density +", gravity = "+gravity+",  eqtemp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
+    example = "[massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
     #TODO usare la Tecnica proibita del viaggiatore resiliente: auto-format dei fatti da dare in pasto all'algoritmo ILP, creando da 0 il fatto..
     #..esempio(Classe, [attributo1 = valore, attr = valore, ...]) a partire da valori numerici utilizzando i mini classif. creati
    
-
+    
     pl.classify(example)
     
     
