@@ -10,10 +10,10 @@ def menu():
     
         print("\nCommands: press 'e' to esc"
             +"\n1) Visualize exoplanets list"
-            +"\n2) Visualize habitable exoplanets list"
+            +"\n2) [NB] Visualize habitable exoplanets list"
             +"\n3) Search planet"
-            +"\n4) Add new exoplanet"  #to do forzare l'inserimento di tutte le feautures
-            +"\n5) Check if an exoplanet is habitable"       
+            +"\n4) Add new exoplanet"  
+            +"\n5) [NB] Check if an exoplanet is habitable"    
             +"\n6) Use induction to classify a planet")            
         
         command = input("\n> ")
@@ -32,16 +32,17 @@ def menu():
             pl.isHabitable(planet)
         elif(command == "6" ):
             pl.learnHab()
-            pl.learnNonHab()                      
-        elif(command == "7"):
+            pl.learnNonHab()             
             classificationMenu()
             #far partire la classificazione
             #stampare le regole indotte
             #inserire pianeta da classificare
             #tramite induzione delle classi
+        elif(command == "e"):
+            flag = False            
         else:
-            flag = False
-            return
+            print("\nWrong command!")
+            
 
 def subMenuPlanet():
     
@@ -124,7 +125,7 @@ def printStarFeatures():
 ##########################################################################################################################    
 
 def classificationMenu():
-    print("Enter example to classify: ")
+    print("Enter an example to classify: ")
     radius = input(" -enter radius : ",)
     mass = input(" -enter mass : ",)
     density = input(" -enter density : ",)
@@ -150,10 +151,9 @@ def classificationMenu():
     sTemp = pl.getStarTempClass(sTemp)
         
     example = "[massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
-    #TODO usare la Tecnica proibita del viaggiatore resiliente: auto-format dei fatti da dare in pasto all'algoritmo ILP, creando da 0 il fatto..
-    #..esempio(Classe, [attributo1 = valore, attr = valore, ...]) a partire da valori numerici utilizzando i mini classif. creati
-   
     
+    #TODO aggiungere controllo su dati che non devono essere classificati ma hanno domini definiti (composition, atmosphere, num stars, ...)
+
     pl.classify(example)
     
     

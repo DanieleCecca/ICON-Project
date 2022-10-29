@@ -307,16 +307,20 @@ prop(P, has_composition, rocky) :-
 
 
 % mass-radius classification
+prop([M|R], massRadius_is_class, subterran) :-
+    M > 0.1, M =< 0.5;
+    R > 0.5, R < 1.2.
+
 prop([M|R], massRadius_is_class, terran) :-
-    M > 0.5, M < 2,
+    M > 0.5, M =< 2;
     R > 0.8, R < 1.9.
 
 prop([M|R], massRadius_is_class, superterran) :-
-    M > 2, M < 10,
+    M > 2, M < 10;
     R > 1.3, R < 3.3.
 
 prop([M|R], massRadius_is_class, neptunian) :-
-    M > 10, M < 50,
+    M > 10, M =< 50;
     R > 3.5, R < 27.
 
 prop([M|R], massRadius_is_class, jovian) :-

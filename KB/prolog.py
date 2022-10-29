@@ -1,7 +1,7 @@
 from pyswip import Prolog
 
 prolog = Prolog()
-prolog.consult("C:/Users/cecca/Desktop/ICON-Project/KB/exo2.pl")
+prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo2.pl")
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
 def getExoplanets():
@@ -147,12 +147,12 @@ def getStarFeatures(planet, feature):
 #######################################################################################################################################################################
 
 # funzione per richiamare la funzione learning tramite algoritmo ILP(inductive logic programming)
-def learnHab():
+def learnNonHab():
     myQuery = "apprendi(non_habitable)"    
     prolog.query(myQuery)
     rule1 = list(prolog.query(myQuery))
 
-def learnNonHab():    
+def learnHab():    
     myQuery = "apprendi(habitable)"    
     prolog.query(myQuery)    
     rule2 = list(prolog.query(myQuery))      
@@ -223,7 +223,7 @@ def getMetallicityClass(metallicity):
         return result
         
 # funzione per richiamare una classe
-def getMassRadiusClass(mass, radius):
+def getMassRadiusClass(mass, radius): #TODO crash se inseriti intervalli non consentiti (RISOLTO mettendo OR)
     myQuery = "prop("+"["+mass+"|"+radius+"]"+", massRadius_is_class, C)"
     print(myQuery)
     resultQuery = list(prolog.query(myQuery))
