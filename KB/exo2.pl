@@ -232,12 +232,12 @@ prop(k2_139_b,his_star_has_met, 0.23).
 prop(k2_10_b,his_star_has_met, -0.07).
 prop(k2_110_b, his_star_has_met, -0.3).
 prop(k2_18_b,his_star_has_met, 0.12).
-prop(k2_72_e, his_star_has_met, nan).
+prop(k2_72_e, his_star_has_met, -0.1).
 prop(wasp_118_b,his_star_has_met,0.16).
 prop(wasp_75_b,his_star_has_met, 0.07).
 prop(wolf_503_b,his_star_has_met, -0.47).
 prop(trappist_1_b,his_star_has_met, 0.04).
-prop(trappist_1_c,his_star_has_met, nan).
+prop(trappist_1_c,his_star_has_met, 0.04).
 prop(trappist_1_f,his_star_has_met, 0.04).
 prop(trappist_1_g,his_star_has_met, 0.04).
 prop(hd_3167_d,his_star_has_met, 0.04).
@@ -301,9 +301,9 @@ prop(D, habitability_is_class, warm) :-
     D > -1.40.
 
 % is an exoplanet made of rock?
-prop(P, has_composition, rocky) :-
-    prop(P, has_composition, rocky_iron);
-    prop(P, has_composition, rocky_water).
+%prop(P, has_composition, rocky) :-
+%    prop(P, has_composition, rocky_iron);
+%    prop(P, has_composition, rocky_water).
 
 
 % mass-radius classification
@@ -388,6 +388,7 @@ prop(MS, metallicity_is_class, low) :-
 
 prop(MS, metallicity_is_class, medium) :-
     MS > 0.
+
 
 % description
 get_info_about(Planet) :-

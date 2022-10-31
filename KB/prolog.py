@@ -4,13 +4,15 @@ prolog = Prolog()
 prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo2.pl")
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
-def getExoplanets():
-
-    print("\nList of all the exoplanets:")
+def getExoplanets():    
     myQuery = "prop(P, hostname, _)."
-    planets = list(prolog.query(myQuery))
+    planets = list(prolog.query(myQuery))          
+    return planets
+
+def printExoplanets(planets):
+    print("\nList of all the exoplanets:")
     for elem in planets:
-        queryPlanets = "> "+ elem["P"] + ""
+        queryPlanets = "> "+ elem["P"] + ""  
         print(queryPlanets)
 
         
@@ -165,7 +167,7 @@ def classify(example):
     resultQuery = list(prolog.query(myQuery))
     for elem in resultQuery:
        result = elem["Classe"]            
-    print("The exoplanet entered belongs to the class: " + result)    
+    return result
     
 # funzione per richiamare una classe
 def getDensityClass(density):
@@ -225,7 +227,6 @@ def getMetallicityClass(metallicity):
 # funzione per richiamare una classe
 def getMassRadiusClass(mass, radius): #TODO crash se inseriti intervalli non consentiti (RISOLTO mettendo OR)
     myQuery = "prop("+"["+mass+"|"+radius+"]"+", massRadius_is_class, C)"
-    print(myQuery)
     resultQuery = list(prolog.query(myQuery))
     for elem in resultQuery:
         result = elem["C"]                 
@@ -251,6 +252,42 @@ def getStarTempClass(starTemp):
         return result
         
         
+def listProp(planetList):
 
+    features = ["hostname", "has_radius", "has_mass", "has_density", "has_gravity", "has_temp", "has_composition", "has_atmosphere",
+    "has_eccentricity", "has_orbit_period", "distance_from_star", "has_stars_in_sys", "his_star_has_met", "his_star_has_temp"]  
+
+    # non creo manualmente lista dei pianeti perchè lista non statica, se ne possono aggiungere altri 
+    planets = [] # lista dei pianeti creata a partire dal risultato (planetList) di una query precedente
+    for elem in planetList:
+        planets.append(elem["P"])    
+ 
+    for p in planets: 
+        values = []      
+        for f in features:             
+            #myQuery = "findall(prop("+p+","+f+",V), prop("+p+","+f+", V), Esempi)."
+            myQuery = "prop("+ p +","+ f +", V)."
+            resultQuery = prolog.query(myQuery)    
+            for elem in resultQuery:
+                values.append(str(elem["V"]))     
+        #print("\nvalues for: ", p, "= ", values)                      
+        transform(p, f, values)        
+
+        
+#TODO IMPLEMENTAZIONE FUTURA: cambiare struttura dati, magari HashMap {feature: value}
+def transform(planets, features, values):      
+
+    massRadius = getMassRadiusClass(values[2], values[1]) #TODO AGgiustuarea
+    density = getDensityClass(values[3])
+    gravity = getGravityClass(values[4])
+    eqTemp = getETempClass(values[5])
+    eccentricity = getEccClass(values[8])
+    oPeriod = getOPeriodClass(values[9])
+    hzd = getHZDClass(values[10])
+    met = getMetallicityClass(values[12])
+    sTemp = getStarTempClass(values[13])
     
-    
+    example = "[massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+values[6]+", atmosphere = "+values[7]+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+values[11]+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
+    resultClass = classify(example)    
+
+    exampleFact = "esempio("+resultClass+", [massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+values[6]+", atmosphere = "+values[7]+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+values[11]+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"

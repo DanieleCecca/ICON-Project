@@ -17,8 +17,13 @@ def menu():
             +"\n6) Use induction to classify a planet")            
         
         command = input("\n> ")
-        if(command == "1"):
-            pl.getExoplanets()
+        
+        planetList = pl.getExoplanets()
+        pl.learnHab()
+        pl.learnNonHab()
+
+        if(command == "1"):            
+            pl.printExoplanets(planetList)
             subMenuPlanet()
         elif(command == "2"):
             pl.getExoplanetsHabitable()
@@ -30,16 +35,16 @@ def menu():
         elif(command == "5"):  #tramite regola        
             planet = input("\nEnter exoplanet name:\n")
             pl.isHabitable(planet)
-        elif(command == "6" ):
-            pl.learnHab()
-            pl.learnNonHab()             
+        elif(command == "6" ):                        
             classificationMenu()
             #far partire la classificazione
             #stampare le regole indotte
             #inserire pianeta da classificare
             #tramite induzione delle classi
+        elif(command == "7"):
+            pl.listProp(planetList)
         elif(command == "e"):
-            flag = False            
+            flag = False             
         else:
             print("\nWrong command!")
             
@@ -154,7 +159,10 @@ def classificationMenu():
     
     #TODO aggiungere controllo su dati che non devono essere classificati ma hanno domini definiti (composition, atmosphere, num stars, ...)
 
-    pl.classify(example)
+    resultClass = pl.classify(example)
+    print("The exoplanet entered belongs to the class: " + resultClass)    
+    
+    
     
     
           
