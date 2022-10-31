@@ -1,5 +1,6 @@
 :- dynamic(prop/3).
 :- dynamic(prop/2).
+:- dynamic(esempio/2).
 
 % general class definition
 prop(P, type, C) :- prop(S, subClassOf, C), prop(P, type, S).

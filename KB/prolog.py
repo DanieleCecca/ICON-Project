@@ -152,12 +152,12 @@ def getStarFeatures(planet, feature):
 def learnNonHab():
     myQuery = "apprendi(non_habitable)"    
     prolog.query(myQuery)
-    rule1 = list(prolog.query(myQuery))
+    list(prolog.query(myQuery))
 
 def learnHab():    
     myQuery = "apprendi(habitable)"    
     prolog.query(myQuery)    
-    rule2 = list(prolog.query(myQuery))      
+    list(prolog.query(myQuery))      
 
 # funzione per richiamare la funzione classify tramite algoritmo ILP (inductive logic programming) 
 def classify(example):
@@ -290,4 +290,5 @@ def transform(planets, features, values):
     example = "[massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+values[6]+", atmosphere = "+values[7]+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+values[11]+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
     resultClass = classify(example)    
 
-    exampleFact = "esempio("+resultClass+", [massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+values[6]+", atmosphere = "+values[7]+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+values[11]+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
+    exampleFact = "esempio("+resultClass+", [massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+values[6]+", atmosphere = "+values[7]+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+values[11]+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"])"
+    prolog.assertz(exampleFact)
