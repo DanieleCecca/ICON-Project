@@ -3,24 +3,23 @@ from lib2to3.pgen2.token import OP
 from math import fabs
 import prolog as pl
 
-def menu():    
-
+def menu():       
+    
     flag = True
+
     while(flag):
     
         print("\nCommands: press 'e' to esc"
             +"\n1) Visualize exoplanets list"
-            +"\n2) [NB] Visualize habitable exoplanets list"
+            +"\n2) [TODO] Visualize habitable exoplanets list"
             +"\n3) Search planet"
-            +"\n4) Add new exoplanet"  
-            +"\n5) [NB] Check if an exoplanet is habitable"    
-            +"\n6) Use induction to classify a planet")            
+            +"\n4) [TODO] Add new exoplanet"  
+            +"\n5) Classify an exoplanet using ILP")                 
         
         command = input("\n> ")
-        
-        planetList = pl.getExoplanets()
-        pl.learnHab()
-        pl.learnNonHab()
+
+        planetList = pl.getExoplanets() 
+        initialization(planetList)
 
         if(command == "1"):            
             pl.printExoplanets(planetList)
@@ -32,22 +31,20 @@ def menu():
             subMenuPlanet() 
         elif(command == "4"):
             menuAddingPlanet()
-        elif(command == "5"):  #tramite regola        
-            planet = input("\nEnter exoplanet name:\n")
-            pl.isHabitable(planet)
-        elif(command == "6" ):                        
-            classificationMenu()
-            #far partire la classificazione
-            #stampare le regole indotte
-            #inserire pianeta da classificare
-            #tramite induzione delle classi
-        elif(command == "7"):
-            pl.listProp(planetList)
+        elif(command == "5"):       
+            initialization(planetList)
+            classificationMenu()                
         elif(command == "e"):
             flag = False             
         else:
             print("\nWrong command!")
             
+
+def initialization(planetList):
+    pl.learn()              
+    pl.listProp(planetList) #converte i fatti nel formato prop in quello necessario per algo ILP
+    pl.prolog.query("forall(esempio(C,O),format('esempio(~w, ~w)~n', [C,O]))") #rende i fatti asseriti "accessibili" all'algo ILP    
+    
 
 def subMenuPlanet():
     
@@ -73,11 +70,9 @@ def subMenuPlanet():
                 subMenuStar(planet)
         
 
-def menuAddingPlanet():    
-    
-    planet = input("\nEnter the name of the new exoplanet:")
-    
-    exit=False
+def menuAddingPlanet():        
+    planet = input("\nEnter the name of the new exoplanet:")    
+    exit = False
     while(exit !=True):
         print("Choose the feature to enter or press 'e' to escape:")
         printPlanetFeatures()
@@ -89,7 +84,25 @@ def menuAddingPlanet():
             value = input("\nEnter value: ")        
             pl.addPlanet(planet,feature,value)
 
+def menuAddingPlanet2():
+
+    planet,has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp = inputExample()
     
+    #sai se è abitabile?
+        # Y -> inserisci classe hab.
+        # N -> chiama funz. di classificaz.
+
+    response = input("Do you know if this exoplanet is habitable or not? [y/n]")
+
+    if(response == "y"):
+        is_hab_class = input("> enter habitability class [habitable/non_habitable]")
+
+    elif(response == "n"):
+        massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = classifyValues(has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp)      
+        example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+has_composition+", atmosphere = "+has_atmosphere+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+has_stars_in_sys+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
+        resultClass = pl.classify(example)
+
+
 def printPlanetFeatures():
     print("\nFeatures:"
           +"\n- radius"
@@ -115,6 +128,7 @@ def subMenuStar(planet):
     
     if(command == 'e'):
         return   
+
     elif(command == 'f'):
         printStarFeatures()       
         feature = input("\nEnter feature: ")
@@ -130,39 +144,54 @@ def printStarFeatures():
 ##########################################################################################################################    
 
 def classificationMenu():
-    print("Enter an example to classify: ")
-    radius = input(" -enter radius : ",)
-    mass = input(" -enter mass : ",)
-    density = input(" -enter density : ",)
-    gravity = input(" -enter gravity: ",)
-    eqTemp = input(" -enter eq temperature : ",)
-    composition = input(" -enter composition : ",)
-    atmosphere = input(" -enter atmosphere : ",)
-    eccentricity = input(" -enter eccentricity : ",)
-    oPeriod = input(" -enter orbit period : ",)
-    hzd = input(" -enter zone distance : ",)
-    nStars = input(" -enter number of stars : ",)
-    met = input(" -enter star metallicity : ",)
-    sTemp = input(" -enter star temp : ",)
+
+    radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nStars, met, sTemp = inputExample()
+
+    #i valori numerici inseriti vengono classificati
+    massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = classifyValues(radius, mass, density, gravity, eqTemp, eccentricity, oPeriod, hzd, met, sTemp)
+
+    #esempio che sarà asserito nella KB e classificato (hab/non_hab) 
+    example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+", eq_temp = "+eqTempClass+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+nStars+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
     
-    massRadius = pl.getMassRadiusClass(mass, radius) #TODO AGgiustuarea
-    density = pl.getDensityClass(density)
-    gravity = pl.getGravityClass(gravity)
-    eqTemp = pl.getETempClass(eqTemp)
-    eccentricity = pl.getEccClass(eccentricity)
-    oPeriod = pl.getOPeriodClass(oPeriod)
-    hzd = pl.getHZDClass(hzd)
-    met = pl.getMetallicityClass(met)
-    sTemp = pl.getStarTempClass(sTemp)
-        
-    example = "[massRadius_class = "+ massRadius +", density = "+ density +", gravity = "+gravity+",  eq_temp = "+eqTemp+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricity+", orbit_period_days = "+oPeriod+", zone_class = "+hzd+", num_stars = "+nStars+" ,metallicity = "+met+" , star_temp_class = "+sTemp+"]"
+    classifyExample(example)  #risultato classificazione hab. class 
+
     
-    #TODO aggiungere controllo su dati che non devono essere classificati ma hanno domini definiti (composition, atmosphere, num stars, ...)
+def inputExample():
+
+    print("Enter an example to classify: ")   
+
+    radius = input("> enter radius: ",)
+    mass = input("> enter mass: ",)
+    density = input("> enter density: ",)
+    gravity = input("> enter gravity: ",)
+    eqTemp = input("> enter equilibrium temperature: ",)
+    composition = input("> enter composition: ",)
+    atmosphere = input("> enter atmosphere: ",)
+    eccentricity = input("> enter eccentricity: ",)
+    oPeriod = input("> enter orbit period: ",)
+    hzd = input("> enter zone distance: ",)
+    nStars = input("> enter number of stars: ",)
+    met = input("> enter star metallicity: ",)
+    sTemp = input("> enter star temperature: ",)
+
+    return radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nStars, met, sTemp
+
+
+def classifyValues(radius, mass, density, gravity, eqTemp, eccentricity, oPeriod, hzd, met, sTemp):
+
+    massRadius = pl.getMassRadiusClass(mass, radius)
+    densityClass = pl.getDensityClass(density)
+    gravityClass = pl.getGravityClass(gravity)
+    eqTempClass = pl.getETempClass(eqTemp)
+    eccentricityClass = pl.getEccClass(eccentricity)
+    oPeriodClass = pl.getOPeriodClass(oPeriod)
+    hzdClass = pl.getHZDClass(hzd)
+    metClass = pl.getMetallicityClass(met)
+    sTempClass = pl.getStarTempClass(sTemp)
+    
+    return massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass
+
+def classifyExample(example):   
 
     resultClass = pl.classify(example)
-    print("The exoplanet entered belongs to the class: " + resultClass)    
-    
-    
-    
-    
-          
+    print("The exoplanet entered belongs to the class: " + resultClass) 

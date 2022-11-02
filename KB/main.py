@@ -8,25 +8,23 @@ if __name__ == '__main__':
 
 #1 Lista pianeti
     #dato un pianeta puoi inferenziare su tutte le caratteristiche oppure chiedere una descizione completa oppure exit tra cui l'hostname
-        #scelto l'hostname si può inferenziare sulle feautures della stella 
-            #TODO atm funziona solamente con il formato "prop(...)" e non con "esempio(...)", poichè:
-                #- non sono identificati da un nome
-                #- e anche se lo fossero, non sono nel formato giusto --> risolvibile usando 'TPVR'
+        #scelto l'hostname si può inferenziare sulle feautures della stella   
         
-#2 Lista pianeti abitabili   ---> TODO togliere o modificare?
+#2 Lista pianeti abitabili   --->  TODO modificare inserendo classif. ILP
     #dato un pianeta puoi inferenziare su tutte le caratteristiche oppure chiedere una descizione completa oppure exit tra cui l'hostname
             #scelto l'hostname si può inferenziare sulle feautures della stella
             
 #3 Dato un pianeta puoi inferenziare su tutte le caratteristiche tra cui l'hostname   
-    #scelto l'hostname si può inferenziare sulle feautures della stella
+    #scelto l'hostname si può inferenziare sulle feautures della stellaS
     
-#4 Aggiungi un pianeta  ---> TODO forzare l'inserimento di tutte le feautures
+#4 Aggiungi un pianeta #TODO forzare inserimento feature e aggiustare
 
-#5 Pianeta scelto abitabile? ---> TODO togliere o modificare?
+#5 Induzione Logica Classe di Abitabilità:   --->   TODO: aggiungere nuovi esempi    
+    #far partire la classificazione
+    #stampare le regole indotte
+    #inserire pianeta da classificare
+    #tramite induzione delle classi 
 
-#6 Induzione Logica per classificazione... 
-    #TODO:
-        #- aggiungere nuovi esempi
-     
-        #- usare la Tecnica Proibita del Viaggiatore Resiliente: auto-format dei fatti da dare in pasto all'algoritmo ILP, creando da 0 il fatto..
-        #..esempio(Classe, [attributo1 = valore, attr = valore, ...]) a partire da valori numerici utilizzando i mini classif. creati 
+   
+ #TODO aggiungere controllo su dati + su quelli che non devono essere classificati ma hanno domini definiti (composition, atmosphere, num stars, ...)
+        
