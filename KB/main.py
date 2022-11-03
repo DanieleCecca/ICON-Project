@@ -10,14 +10,13 @@ if __name__ == '__main__':
     #dato un pianeta puoi inferenziare su tutte le caratteristiche oppure chiedere una descizione completa oppure exit tra cui l'hostname
         #scelto l'hostname si può inferenziare sulle feautures della stella   
         
-#2 Lista pianeti abitabili   --->  TODO modificare inserendo classif. ILP
-    #dato un pianeta puoi inferenziare su tutte le caratteristiche oppure chiedere una descizione completa oppure exit tra cui l'hostname
-            #scelto l'hostname si può inferenziare sulle feautures della stella
-            
-#3 Dato un pianeta puoi inferenziare su tutte le caratteristiche tra cui l'hostname   
-    #scelto l'hostname si può inferenziare sulle feautures della stellaS
+#2 Lista pianeti abitabili   
+    #restituisce una lista di tutti i pianeti abitabili tra tutti gli esempi di training
     
-#4 Aggiungi un pianeta #TODO forzare inserimento feature e aggiustare
+#3 Dato un pianeta puoi inferenziare su tutte le caratteristiche tra cui l'hostname  #TODO non funge la stampa della descrizione  
+    #scelto l'hostname si può inferenziare sulle feautures della stella
+    
+#4 Aggiungi un pianeta
 
 #5 Induzione Logica Classe di Abitabilità:   --->   TODO: aggiungere nuovi esempi    
     #far partire la classificazione

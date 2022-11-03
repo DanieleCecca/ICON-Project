@@ -71,21 +71,21 @@ prop(gj_667_Cc, has_radius, 1.54).
 %mass in Earth Unit(5,9726×10e24 kg)
 prop(k2_139_b, has_mass, 121.14).
 prop(k2_10_b, has_mass, 27).
-prop(k2_110_b,has_mass , 17.09).
-prop(k2_18_b,has_mass , 16.46).
-prop(k2_72_e,has_mass , 3.13).
+prop(k2_110_b, has_mass, 17.09).
+prop(k2_18_b, has_mass, 16.46).
+prop(k2_72_e, has_mass, 3.13).
 prop(wasp_118_b, has_mass, 163.42).
-prop(wasp_75_b,has_mass , 340.2).
+prop(wasp_75_b, has_mass, 340.2).
 prop(wolf_503_b, has_mass, 10.9).
-prop(trappist_1_b,has_mass , 1.26).
+prop(trappist_1_b, has_mass, 1.26).
 prop(trappist_1_c, has_mass, 1.38).
 prop(trappist_1_f, has_mass, 1.07).
 prop(trappist_1_g, has_mass, 1.34).
-prop(hd_3167_d,has_mass , 6.9).
-prop(ross_128_b,has_mass , 1.4).
-prop(gj_9827_b,has_mass , 8.2).
-prop(gj_180_c,has_mass , 6.4).
-prop(gj_422_b,has_mass , 9.9).
+prop(hd_3167_d, has_mass, 6.9).
+prop(ross_128_b, has_mass, 1.4).
+prop(gj_9827_b, has_mass, 8.2).
+prop(gj_180_c, has_mass, 6.4).
+prop(gj_422_b, has_mass, 9.9).
 prop(gj_667_Cc, has_mass, 3.8).
 
 %density in Earth Unit (5,51 g/cm³)
@@ -467,7 +467,10 @@ prop(MS, metallicity_is_class, medium) :-
 get_info_about(Planet) :-
     prop(Planet, hostname, Star),
     write(Planet),
-    write(' is an exoplanet in a planetary system whose star is '),
+    prop(Planet, is_hab_class, Hab),
+    write(' is an '),
+    write(Hab),
+    write(' exoplanet in a planetary system whose star is '),
     write(Star),
     prop(Planet, is_mass_class, Class),
     write(', it was classified by mass as a '),
