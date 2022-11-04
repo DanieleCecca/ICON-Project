@@ -13,7 +13,7 @@ if __name__ == '__main__':
 #2 Lista pianeti abitabili   
     #restituisce una lista di tutti i pianeti abitabili tra tutti gli esempi di training
     
-#3 Dato un pianeta puoi inferenziare su tutte le caratteristiche tra cui l'hostname  #TODO non funge la stampa della descrizione  
+#3 Dato un pianeta puoi inferenziare su tutte le caratteristiche tra cui l'hostname 
     #scelto l'hostname si può inferenziare sulle feautures della stella
     
 #4 Aggiungi un pianeta

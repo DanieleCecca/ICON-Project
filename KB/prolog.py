@@ -30,26 +30,28 @@ def getHabitableExoplanets():
         print(queryPlanets)
 
 
-# funzione per richiamare la query prolog che restituisce una descrizione del pianeta
+#TODO si rompe se cercato pianeta inserito: non abbastanza info
+# funzione che restituisce una breve descrizione del pianeta
 def getInfo(planet):  
 
-    myQuery = "get_info_about("+ planet + ")"
-    list(prolog.query(myQuery))      
+    selectedFeatures = ["is_hab_class", "hostname", "was_discovered_in", "has_mass", "has_radius"]
+    values = []  
+
+    for f in selectedFeatures:
+        myQuery = "prop("+ planet + ", "+ f +", V)"
+        resultQuery = prolog.query(myQuery)
+        for elem in resultQuery:
+            values.append(str(elem["V"]))
+
+    featureDict = {"hab": values[0], "star": values[1], "year": values[2], "mass": values[3], "radius": values[4]}
+
+    massRadiusClass = getMassRadiusClass(featureDict["mass"], featureDict["radius"])
+
+    print("\n"+ planet + " is a " + featureDict["hab"]+ " exoplanet discovered in " + featureDict["year"] + " and it is in a planetary system" +
+    " whose star is " + featureDict["star"] + ".\nIt is a " + massRadiusClass +"-like planet.")    
+
         
-    #prop(Planet, is_hab_class, Hab),
-    #write(' is an '),
-    #write(Hab),
-    #write(' exoplanet in a planetary system whose star is '),
-    #write(Star),
-    #prop(Planet, is_mass_class, Class),
-    #write(', it was classified by mass as a '),
-    #write(Class),
-    #prop(Planet, was_discovered_in, Year),
-    #write(' and it was discovered in '),
-    #write(Year).
-    
-    
-#TO DO gestire gli errori
+#TODO si rompe se chiamata per feature non inserite di nuovi pianeti
 # funzione per richiamare la query prolog che restituisce il valore della feature indicata del pianeta dato
 def getValue(planet, feature):
     
@@ -242,33 +244,36 @@ def getStarTempClass(starTemp):
 def getFeatures(): #n potrei anche usare query prolog ma le features sono sempre le stesse...
 
     features = ["hostname", "has_radius", "has_mass", "has_density", "has_gravity", "has_temp", "has_composition", "has_atmosphere",
-    "has_eccentricity", "has_orbit_period", "distance_from_star", "has_stars_in_sys", "his_star_has_met", "his_star_has_temp", "is_hab_class"]  
+    "has_eccentricity", "has_orbit_period", "distance_from_star", "has_stars_in_sys", "his_star_has_met", "his_star_has_temp",
+    "is_hab_class", "was_discovered_in"]  
 
     return features
 
 
-def classifyValues(radius, mass, density, gravity, eqTemp, eccentricity, oPeriod, hzd, met, sTemp):
+def classifyValues(featureDict):
 
-    massRadius = getMassRadiusClass(mass, radius)
-    densityClass = getDensityClass(density)
-    gravityClass = getGravityClass(gravity)
-    eqTempClass = getEqTempClass(eqTemp)
-    eccentricityClass = getEccClass(eccentricity)
-    oPeriodClass = getOPeriodClass(oPeriod)
-    hzdClass = getHZDClass(hzd)
-    metClass = getMetallicityClass(met)
-    sTempClass = getStarTempClass(sTemp)
+    massRadius = getMassRadiusClass(featureDict["mass"], featureDict["radius"])
+    densityClass = getDensityClass(featureDict["density"])
+    gravityClass = getGravityClass(featureDict["gravity"])
+    eqTempClass = getEqTempClass(featureDict["eqTemp"])
+    eccentricityClass = getEccClass(featureDict["eccentricity"])
+    oPeriodClass = getOPeriodClass(featureDict["oPeriod"])
+    hzdClass = getHZDClass(featureDict["hzd"])
+    metClass = getMetallicityClass(featureDict["met"])
+    sTempClass = getStarTempClass(featureDict["starTemp"])
     
     return massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass
+
 
 def classifyExample(example):   
 
     resultClass = classify(example)
-    print("The exoplanet entered belongs to the class: " + resultClass)
+    print("\nThe exoplanet entered belongs to the class: " + resultClass)
 
     return resultClass 
 
 
+#funzione che prende tutti i valori di tutti i pianeti per ogni feature
 def listProp(planetList):
 
     features = getFeatures()
@@ -286,17 +291,30 @@ def listProp(planetList):
             resultQuery = prolog.query(myQuery)    
             for elem in resultQuery:
                 values.append(str(elem["V"]))     #aggiungo man mano i valori alla lista in formato stringa
-        #print("\nvalues for: ", p, "= ", values)                      
-        transform(values)        
+
+        #print("\nvalues for: ", p, "= ", values)
+        featureDict = createDict(values)                      
+        transform(featureDict) 
+    
+
+#creo dizionario per accedere più semplicemente ai dati e rendere più leggibile il programma
+def createDict(values):    
+   
+    featureDict = {"star": values[0],"radius": values[1], "mass": values[2], "density": values[3], "gravity": values[4], "eqTemp": values[5],
+                    "composition": values[6], "atmosphere": values[7], "eccentricity": values[8], "oPeriod": values[9], "hzd": values[10],
+                    "numStars": values[11], "met": values[12], "starTemp": values[13], "year": values[14], "hab": values[15]}
+
+    return featureDict      
 
         
-#TODO IMPLEMENTAZIONE FUTURA ?: cambiare struttura dati, magari HashMap {feature: value}
-def transform(values):
-  
-    massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = classifyValues(values[1], values[2], values[3], values[4], values[5], values[8], values[9], values[10], values[12], values[13])      
-        
-    exampleFact = "esempio("+values[14]+", [massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+values[6]+", atmosphere = "+values[7]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+values[11]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"])"
+#funzione che trasforma in notazione "esempio(C,O)" tutti i fatti presenti
+def transform(featureDict):
+
+    massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = classifyValues(featureDict)  
+              
+    exampleFact = "esempio("+featureDict["hab"]+", [massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+featureDict["composition"]+", atmosphere = "+featureDict["atmosphere"]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+featureDict["numStars"]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"])"
     prolog.assertz(exampleFact)
+
 
     ################################   TODO: FINIRE DI RISCRIVERLI NELLA KB IN FORMATO PROP(...)   ############################################    
     #hd283869

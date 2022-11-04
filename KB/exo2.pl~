@@ -71,21 +71,21 @@ prop(gj_667_Cc, has_radius, 1.54).
 %mass in Earth Unit(5,9726×10e24 kg)
 prop(k2_139_b, has_mass, 121.14).
 prop(k2_10_b, has_mass, 27).
-prop(k2_110_b,has_mass , 17.09).
-prop(k2_18_b,has_mass , 16.46).
-prop(k2_72_e,has_mass , 3.13).
+prop(k2_110_b, has_mass, 17.09).
+prop(k2_18_b, has_mass, 16.46).
+prop(k2_72_e, has_mass, 3.13).
 prop(wasp_118_b, has_mass, 163.42).
-prop(wasp_75_b,has_mass , 340.2).
+prop(wasp_75_b, has_mass, 340.2).
 prop(wolf_503_b, has_mass, 10.9).
-prop(trappist_1_b,has_mass , 1.26).
+prop(trappist_1_b, has_mass, 1.26).
 prop(trappist_1_c, has_mass, 1.38).
 prop(trappist_1_f, has_mass, 1.07).
 prop(trappist_1_g, has_mass, 1.34).
-prop(hd_3167_d,has_mass , 6.9).
-prop(ross_128_b,has_mass , 1.4).
-prop(gj_9827_b,has_mass , 8.2).
-prop(gj_180_c,has_mass , 6.4).
-prop(gj_422_b,has_mass , 9.9).
+prop(hd_3167_d, has_mass, 6.9).
+prop(ross_128_b, has_mass, 1.4).
+prop(gj_9827_b, has_mass, 8.2).
+prop(gj_180_c, has_mass, 6.4).
+prop(gj_422_b, has_mass, 9.9).
 prop(gj_667_Cc, has_mass, 3.8).
 
 %density in Earth Unit (5,51 g/cm³)
@@ -465,16 +465,10 @@ prop(MS, metallicity_is_class, medium) :-
 
 % description
 get_info_about(Planet) :-
-    prop(Planet, hostname, Star),
-    write(Planet),
-    write(' is an exoplanet in a planetary system whose star is '),
-    write(Star),
-    prop(Planet, is_mass_class, Class),
-    write(', it was classified by mass as a '),
-    write(Class),
-    prop(Planet, was_discovered_in, Year),
-    write(' and it was discovered in '),
-    write(Year).
+    prop(Planet, is_hab_class, Hab),
+    write(Planet), write(' is an '),
+    write(Hab).
+
 
 get_systems :-
     prop(_, hostname, Star),
@@ -505,8 +499,16 @@ attributo(metallicity, [nan, low, medium]).
 attributo(star_temp_class, [f,g,k,m]). %f:6000<t<7000, g:5200<t<6000,
 
 
-esempio(habitable, [massRadius_class = terran, density = medium, gravity = weak, eq_temp = acceptable, composition = rocky_iron, atmosphere = metals_rich, eccentricity = circular, orbit_period_days = a_lot, zone_class = warm, num_stars = 1, metallicity = low, star_temp_class = m]).
-esempio(non_habitable, [massRadius_class = jovian, density = low, gravity = medium, eq_temp = too_high, composition = gas, atmosphere = hydrogene_rich, eccentricity = elliptic, orbit_period_days = a_lot, zone_class = hot, num_stars = 1, metallicity = medium, star_temp_class = g]).
+% esempio(habitable, [massRadius_class = terran, density = medium,
+% gravity = weak, eq_temp = acceptable, composition = rocky_iron,
+% atmosphere = metals_rich, eccentricity = circular, orbit_period_days =
+% a_lot, zone_class = warm, num_stars = 1, metallicity = low,
+% star_temp_class = m]).
+% esempio(non_habitable, [massRadius_class = jovian, density = low,
+% gravity = medium, eq_temp = too_high, composition = gas, atmosphere =
+% hydrogene_rich, eccentricity = elliptic, orbit_period_days = a_lot,
+% zone_class = hot, num_stars = 1, metallicity = medium, star_temp_class
+% = g]).
 
 
 classifica(Oggetto, Classe) :- %object: lista coppie (attr,valore)
@@ -529,8 +531,6 @@ soddisfa(Oggetto,Congiunzione) :- %nella lista passata al 2� argomento (quindi
 apprendi(Classe) :-
     bagof(esempio(C,O), esempio(C,O), Esempi), %accogghj gli esempi in una lista
     apprendi(Esempi, Classe, Descrizione), %induce la regola (crea la description che corrisponde alla classe passata in input in relazione agli esempi raccolti dal training set
-    nl, write(Classe), write(' <=='),nl, %stampa la regola
-    write(Descrizione),
     assert(Classe<==Descrizione). %asserisce regola (associa a quella classe la description costruita
 
 % per coprire tutti gli oggetti della Classe in Examples:

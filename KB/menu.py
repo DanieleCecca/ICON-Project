@@ -1,6 +1,4 @@
-from doctest import Example
 from lib2to3.pgen2.token import OP
-from math import fabs
 import prolog as pl
 
 def menu():       
@@ -19,8 +17,7 @@ def menu():
         command = input("\n> ")
 
         planetList = pl.getExoplanets() #posizione corretta: aggiorna lista pianeti dopo che è uscito da addPlanet()
-        initialization(planetList) #TODO trovare posto dove chiamarla: ora learn() chiamata quando si torna al menu dopo la 1a volta
-                                    #infatti, se classifMenu chiamata prima che stampate regole, crash
+        initialization(planetList) 
 
         if(command == "1"):      
             pl.printExoplanets(planetList)
@@ -39,15 +36,15 @@ def menu():
             print("\nWrong command!")
             
 
-def initialization(planetList):
-    pl.learn()              
+def initialization(planetList):                  
     pl.listProp(planetList) #converte i fatti nel formato prop in quello necessario per algo ILP
+    pl.learn()   
         
 
 def subMenuPlanet():
     
     print("\nPress 'e' to escape\n"
-          + "'d' to get a description of a chosen planet\n"
+          + "'d' to get a brief description of a chosen planet\n"
           + "'f' to get information about a feature of a chosen planet")
     
     command = input("\n> ")
@@ -55,9 +52,10 @@ def subMenuPlanet():
     if(command == 'e'):
         return
     else:
-        planet = input("\nEnter exoplanet name: ")
+        planet = input("\nEnter exoplanet name: ")       
         
         if(command == 'd'):
+            
             pl.getInfo(planet)
             
         elif(command == 'f'):
@@ -73,11 +71,14 @@ def menuAddingPlanet():
     valueList = []
     is_hab_class = ""
 
-    planet = input("Enter the name of the exoplanet to add to the Knowledge Base:\n> ")
-    hostname = input("Enter the name of the star system where " + planet + " is located:\n> ")
+    planet = input("\nEnter the name of the exoplanet to add to the Knowledge Base:\n> ")
+    hostname = input("\nWhat is the name of the star system where " + planet + " is located?\n> ")
+    year = input("\nIn which year its discovery was announced?\n> ")
 
     has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp = inputExample()
-    valueList.extend([hostname,has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp])    
+    valueList.extend([hostname,has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp, year, ""])  
+
+    featureDict = pl.createDict(valueList)
     
     #sai se è abitabile?
         # Y -> inserisci classe hab.
@@ -89,14 +90,16 @@ def menuAddingPlanet():
         is_hab_class = input("\nEnter habitability class [habitable/non_habitable]:\n> ")        
 
     elif(response == "n"):
-        massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = pl.classifyValues(has_radius,has_mass,has_density,has_gravity,has_temp,has_eccentricity,has_orbit_period,distance_from_star,his_star_has_met,his_star_has_temp)      
+        massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = pl.classifyValues(featureDict)      
         example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+has_composition+", atmosphere = "+has_atmosphere+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+has_stars_in_sys+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
-        is_hab_class = pl.classifyExample(example) #TODO learn() ??
+        is_hab_class = pl.classifyExample(example)
     else:
         print("Wrong command!")
         return
 
+    valueList.pop()
     valueList.append(is_hab_class)
+    print(is_hab_class)
     pl.addPlanet(planet, valueList)
 
     print("\nExoplanet: inserted")
@@ -144,15 +147,28 @@ def printStarFeatures():
 def classificationMenu():
 
     print("\nEnter an example to classify: ") 
-    radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nStars, met, sTemp = inputExample()
+
+    featureDict = classificationInput()
 
     #i valori numerici inseriti vengono classificati
-    massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = pl.classifyValues(radius, mass, density, gravity, eqTemp, eccentricity, oPeriod, hzd, met, sTemp)
+    massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = pl.classifyValues(featureDict)
 
     #esempio che sarà asserito nella KB e classificato (hab/non_hab) 
-    example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+", eq_temp = "+eqTempClass+", composition = "+composition+", atmosphere = "+atmosphere+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+nStars+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
+    example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+", eq_temp = "+eqTempClass+", composition = "+featureDict["composition"]+", atmosphere = "+featureDict["atmosphere"]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+featureDict["numStars"]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
     
     pl.classifyExample(example)  #risultato classificazione hab. class 
+
+
+#funzione restituisce un dizionario che contiene le feature come chiavi e come valori quelli inseriti in input
+def classificationInput():
+
+    values = []
+    radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nStars, met, sTemp = inputExample()  
+    
+    values.extend(["",radius,mass,density,gravity,eqTemp,composition,atmosphere,eccentricity,oPeriod,hzd,nStars,met,sTemp,"",""])
+    featureDict = pl.createDict(values)
+
+    return featureDict
 
     
 def inputExample():    

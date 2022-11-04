@@ -462,27 +462,6 @@ prop(MS, metallicity_is_class, low) :-
 prop(MS, metallicity_is_class, medium) :-
     MS > 0.
 
-
-% description
-get_info_about(Planet) :-
-    prop(Planet, hostname, Star),
-    write(Planet),
-    prop(Planet, is_hab_class, Hab),
-    write(' is an '),
-    write(Hab),
-    write(' exoplanet in a planetary system whose star is '),
-    write(Star),
-    prop(Planet, is_mass_class, Class),
-    write(', it was classified by mass as a '),
-    write(Class),
-    prop(Planet, was_discovered_in, Year),
-    write(' and it was discovered in '),
-    write(Year).
-
-get_systems :-
-    prop(_, hostname, Star),
-    write(Star).
-
 %----------------------------------------------------
 
 %DEFINIZIONE DELLE CLASSI
@@ -540,8 +519,6 @@ soddisfa(Oggetto,Congiunzione) :- %nella lista passata al 2� argomento (quindi
 apprendi(Classe) :-
     bagof(esempio(C,O), esempio(C,O), Esempi), %accogghj gli esempi in una lista
     apprendi(Esempi, Classe, Descrizione), %induce la regola (crea la description che corrisponde alla classe passata in input in relazione agli esempi raccolti dal training set
-    nl, write(Classe), write(' <=='),nl, %stampa la regola
-    write(Descrizione),
     assert(Classe<==Descrizione). %asserisce regola (associa a quella classe la description costruita
 
 % per coprire tutti gli oggetti della Classe in Examples:
