@@ -1,20 +1,22 @@
 from lib2to3.pgen2.token import OP
 import prolog as pl
 
+import streamlit as st
+
 def menu():       
     
-    flag = True
+    flag = True   
 
     while(flag):
     
-        print("\nCommands: press 'e' to esc"
+        st.write("\nCommands available:"
             +"\n1) Visualize exoplanets list"
             +"\n2) Visualize habitable exoplanets list"
             +"\n3) Search for an exoplanet"
             +"\n4) Add a new exoplanet"  
-            +"\n5) Classify an exoplanet: is it habitable or not?")                 
+            +"\n5) Classify an exoplanet: is it habitable or not?")        
         
-        command = input("\n> ")
+        command = st.text_input("Enter a number...")
 
         planetList = pl.getExoplanets() #posizione corretta: aggiorna lista pianeti dopo che è uscito da addPlanet()
         initialization(planetList) 
