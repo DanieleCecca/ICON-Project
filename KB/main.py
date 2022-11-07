@@ -1,9 +1,9 @@
-import menu
-import streamlitFile as stFile
+from pages import menu
+import streamlitFile as welcome
 
 
 if __name__ == '__main__':    
-    stFile.streamlitFile()
+    welcome.welcome()
     menu.menu()
 
 
@@ -19,7 +19,7 @@ if __name__ == '__main__':
 # 3 Dato un pianeta puoi inferenziare su tutte le caratteristiche tra cui l'hostname
     # scelto l'hostname si può inferenziare sulle feautures della stella
 
-# 4 Aggiungi un pianeta
+# 4 Aggiungi un pianeta #TODO unbound error
 
 # 5 Induzione Logica Classe di Abitabilità:   --->   TODO: aggiungere nuovi esempi
     # far partire la classificazione
