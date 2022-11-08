@@ -3,8 +3,7 @@ import streamlit as st
 
 # Opening file from file path
 
-file = "C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/pages/classificazione.pdf"
-#file = "classificazione.pdf"
+file = "classificazione.pdf"
 
 with open(file, "rb") as f:
     base64_pdf = base64.b64encode(f.read()).decode('utf-8')
