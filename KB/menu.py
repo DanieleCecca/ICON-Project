@@ -33,7 +33,8 @@ def menu():
         elif(command == "5"):  
             classificationMenu()                
         elif(command == "e"):
-            flag = False             
+            flag = False        
+            st.stop()     
         else:
             print("\nWrong command!")
             
@@ -105,7 +106,7 @@ def menuAddingPlanet():
 
     valueList.pop()
     valueList.append(is_hab_class)
-    print(valueList)
+    #print(valueList)
     #print(is_hab_class)
     pl.addPlanet(planet, valueList)
 
