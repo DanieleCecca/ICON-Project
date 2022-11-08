@@ -467,42 +467,42 @@ prop(kepler_68_b, distance_from_star, -2.38).
 prop(wasp_80_b, distance_from_star, -2.15).
 
 %number of stars in the system
-prop(k2_139_b,has_stars_in_sys, 1).
-prop(k2_10_b,has_stars_in_sys, 1).
-prop(k2_110_b,has_stars_in_sys, 1).
-prop(k2_18_b,has_stars_in_sys, 1).
-prop(k2_72_e,has_stars_in_sys, 1).
-prop(wasp_118_b,has_stars_in_sys, 1).
-prop(wasp_75_b,has_stars_in_sys, 2).
-prop(wolf_503_b,has_stars_in_sys, 1).
-prop(trappist_1_b,has_stars_in_sys, 1).
-prop(trappist_1_c,has_stars_in_sys, 7).
-prop(trappist_1_f,has_stars_in_sys, 1).
-prop(trappist_1_g, has_stars_in_sys,1).
-prop(hd_3167_d,has_stars_in_sys, 1).
-prop(ross_128_b,has_stars_in_sys, 1).
-prop(gj_9827_b,has_stars_in_sys, 1).
-prop(gj_180_c,has_stars_in_sys, 2).
-prop(gj_422_b,has_stars_in_sys, 1).
-prop(gj_667_Cc, has_stars_in_sys, 6).
-prop(hd_283869_b, has_stars_in_sys, 1).
-prop(kepler_61_b, has_stars_in_sys, 1).
-prop(kepler_443_b, has_stars_in_sys, 1).
-prop(wolf_1061_c, has_stars_in_sys, 3).
-prop(gj_163_c, has_stars_in_sys, 3).
-prop(gj_3634_b, has_stars_in_sys, 1).
-prop(kapteyn_b, has_stars_in_sys, 2).
-prop(trappist_1_e, has_stars_in_sys, 7).
-prop(kepler_1652_b, has_stars_in_sys, 1).
-prop(kepler_442_b, has_stars_in_sys, 1).
-prop(kepler_1229_b, has_stars_in_sys, 1).
-prop(proxima_cen_b, has_stars_in_sys, 1).
-prop(gj_86_ab, has_stars_in_sys, 1).
-prop(gj_581_b, has_stars_in_sys, 3).
-prop(k2_17_b, has_stars_in_sys, 1).
-prop(hd_38283_b, has_stars_in_sys, 1).
-prop(kepler_68_b, has_stars_in_sys, 3).
-prop(wasp_80_b, has_stars_in_sys, 1).
+prop(k2_139_b,planets_in_sys, 1).
+prop(k2_10_b,planets_in_sys, 1).
+prop(k2_110_b,planets_in_sys, 1).
+prop(k2_18_b,planets_in_sys, 1).
+prop(k2_72_e,planets_in_sys, 1).
+prop(wasp_118_b,planets_in_sys, 1).
+prop(wasp_75_b,planets_in_sys, 2).
+prop(wolf_503_b,planets_in_sys, 1).
+prop(trappist_1_b,planets_in_sys, 1).
+prop(trappist_1_c,planets_in_sys, 7).
+prop(trappist_1_f,planets_in_sys, 1).
+prop(trappist_1_g, planets_in_sys,1).
+prop(hd_3167_d,planets_in_sys, 1).
+prop(ross_128_b,planets_in_sys, 1).
+prop(gj_9827_b,planets_in_sys, 1).
+prop(gj_180_c,planets_in_sys, 2).
+prop(gj_422_b,planets_in_sys, 1).
+prop(gj_667_Cc, planets_in_sys, 6).
+prop(hd_283869_b, planets_in_sys, 1).
+prop(kepler_61_b, planets_in_sys, 1).
+prop(kepler_443_b, planets_in_sys, 1).
+prop(wolf_1061_c, planets_in_sys, 3).
+prop(gj_163_c, planets_in_sys, 3).
+prop(gj_3634_b, planets_in_sys, 1).
+prop(kapteyn_b, planets_in_sys, 2).
+prop(trappist_1_e, planets_in_sys, 7).
+prop(kepler_1652_b, planets_in_sys, 1).
+prop(kepler_442_b, planets_in_sys, 1).
+prop(kepler_1229_b, planets_in_sys, 1).
+prop(proxima_cen_b, planets_in_sys, 1).
+prop(gj_86_ab, planets_in_sys, 1).
+prop(gj_581_b, planets_in_sys, 3).
+prop(k2_17_b, planets_in_sys, 1).
+prop(hd_38283_b, planets_in_sys, 1).
+prop(kepler_68_b, planets_in_sys, 3).
+prop(wasp_80_b, planets_in_sys, 1).
 
 %metallicity[star]
 prop(k2_139_b,his_star_has_met, 0.23).
@@ -688,11 +688,11 @@ prop([M|R], massRadius_is_class, superterran) :-
     R > 1.3, R < 3.3.
 
 prop([M|R], massRadius_is_class, neptunian) :-
-    M > 10, M =< 50;
+    M >= 10, M =< 50;
     R > 3.5, R < 27.
 
 prop([M|R], massRadius_is_class, jovian) :-
-    M > 50, M < 5000,
+    M > 50, M < 5000;
     R > 3.5, R < 27.
 
 
@@ -745,7 +745,7 @@ prop(OP, operiod__is_class, few) :-
     OP =< 10.
 
 prop(OP, operiod__is_class, many) :-
-    OP >= 10, OP =< 20.
+    OP > 10, OP =< 20.
 
 prop(OP, operiod__is_class, a_lot) :-
     OP >= 20.

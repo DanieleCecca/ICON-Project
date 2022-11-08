@@ -64,8 +64,12 @@ def subMenuPlanet():
             printPlanetFeatures()            
             feature = input("\nEnter feature: ")
             pl.getValue(planet, feature)
-            if(feature == "p"):
+
+            res = input("\nDo you want to know something about his star either? [y/n]\n> ")
+            if(res == "y"):
                 subMenuStar(planet)
+            else:
+                return
         
 
 def menuAddingPlanet():
@@ -77,8 +81,8 @@ def menuAddingPlanet():
     hostname = input("\nWhat is the name of the star system where " + planet + " is located?\n> ")
     year = input("\nIn which year its discovery was announced?\n> ")
 
-    has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp = inputExample()
-    valueList.extend([hostname,has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,has_stars_in_sys,his_star_has_met,his_star_has_temp, year, ""])  
+    has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,planets_in_sys,his_star_has_met,his_star_has_temp = inputExample()
+    valueList.extend([hostname,has_radius,has_mass,has_density,has_gravity,has_temp,has_composition,has_atmosphere,has_eccentricity,has_orbit_period,distance_from_star,planets_in_sys,his_star_has_met,his_star_has_temp, year, ""])  
 
     featureDict = pl.createDict(valueList)
     
@@ -93,7 +97,7 @@ def menuAddingPlanet():
 
     elif(response == "n"):
         massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = pl.classifyValues(featureDict)      
-        example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+has_composition+", atmosphere = "+has_atmosphere+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+has_stars_in_sys+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
+        example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+has_composition+", atmosphere = "+has_atmosphere+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_planets = "+planets_in_sys+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
         is_hab_class = pl.classifyExample(example)
     else:
         print("Wrong command!")
@@ -101,7 +105,7 @@ def menuAddingPlanet():
 
     valueList.pop()
     valueList.append(is_hab_class)
-    print(is_hab_class)
+    #print(is_hab_class)
     pl.addPlanet(planet, valueList)
 
     print("\nExoplanet: inserted")
@@ -111,23 +115,22 @@ def printPlanetFeatures():
           +"\n- radius"
           +"\n- mass"
           +"\n- density"
-          +"\n- volume"
           +"\n- gravity"
           +"\n- equilibrium temperature"
           +"\n- composition"
           +"\n- atmosphere type"
           +"\n- orbit period"
           +"\n- eccentricity"
-          +"\n- discovery year"
+          +"\n- discovery year"    
           +"\n- planetary system")  
 
 
 def subMenuStar(planet):
     
-    print("Press e to escape\n"
-          + "f to get information about a feature of a chosen star")
+    print("\nPress 'e' to escape\n"
+          + "'f' to get information about a feature of a chosen star")
     
-    command = input()
+    command = input("> ")
     
     if(command == 'e'):
         return   
@@ -142,8 +145,9 @@ def printStarFeatures():
     print("Features of the star:"
           +"\n- metallicity"
           +"\n- effective temperature"
+          +"\n- planets in system"
           +"\n- spectral classification")   
-    
+
 ##########################################################################################################################    
 
 def classificationMenu():
@@ -156,7 +160,7 @@ def classificationMenu():
     massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = pl.classifyValues(featureDict)
 
     #esempio che sarà asserito nella KB e classificato (hab/non_hab) 
-    example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+", eq_temp = "+eqTempClass+", composition = "+featureDict["composition"]+", atmosphere = "+featureDict["atmosphere"]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+featureDict["numStars"]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
+    example = "[massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+", eq_temp = "+eqTempClass+", composition = "+featureDict["composition"]+", atmosphere = "+featureDict["atmosphere"]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_planets = "+featureDict["numPlanets"]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"]"
     
     pl.classifyExample(example)  #risultato classificazione hab. class 
 
@@ -165,9 +169,9 @@ def classificationMenu():
 def classificationInput():
 
     values = []
-    radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nStars, met, sTemp = inputExample()  
+    radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nPlanets, met, sTemp = inputExample()  
     
-    values.extend(["",radius,mass,density,gravity,eqTemp,composition,atmosphere,eccentricity,oPeriod,hzd,nStars,met,sTemp,"",""])
+    values.extend(["",radius,mass,density,gravity,eqTemp,composition,atmosphere,eccentricity,oPeriod,hzd,nPlanets,met,sTemp,"",""])
     featureDict = pl.createDict(values)
 
     return featureDict
@@ -175,18 +179,20 @@ def classificationInput():
     
 def inputExample():    
 
-    radius = input("> enter radius: ",)
-    mass = input("> enter mass: ",)
-    density = input("> enter density: ",)
-    gravity = input("> enter gravity: ",)
-    eqTemp = input("> enter equilibrium temperature: ",)
-    composition = input("> enter composition: ",)
-    atmosphere = input("> enter atmosphere: ",)
-    eccentricity = input("> enter eccentricity: ",)
-    oPeriod = input("> enter orbit period: ",)
-    hzd = input("> enter zone distance: ",)
-    nStars = input("> enter number of stars: ",)
-    met = input("> enter star metallicity: ",)
-    sTemp = input("> enter star temperature: ",)
+    print("\nNB] in the square brackets we suggest the typical values for each feature")  
 
-    return radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nStars, met, sTemp
+    radius = input("\n> enter radius [> 0]: ",)
+    mass = input("> enter mass [> 0]: ",)
+    density = input("> enter density [> 0]: ",)
+    gravity = input("> enter gravity [> 0]: ",)
+    eqTemp = input("> enter equilibrium temperature [> 200]: ",)
+    composition = input("> enter composition [gas/rocky_iron/rocky_water]: ",)
+    atmosphere = input("> enter atmosphere [hydrogene_rich/metals_rich]: ",)
+    eccentricity = input("> enter eccentricity [>= 0]: ",)
+    oPeriod = input("> enter orbit period [> 0]: ",)
+    hzd = input("> enter zone distance [-3, 3]: ",)
+    nPlanets = input("> enter number of planets [1, 7]: ",)
+    met = input("> enter star metallicity [-2, 2]: ",)
+    sTemp = input("> enter star temperature [> 2000]: ",)
+
+    return radius, mass, density, gravity, eqTemp, composition, atmosphere, eccentricity, oPeriod, hzd, nPlanets, met, sTemp

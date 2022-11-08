@@ -51,7 +51,6 @@ def getInfo(planet):
     " whose star is " + featureDict["star"] + ".\nIt is a " + massRadiusClass +"-like planet.")    
 
         
-#TODO si rompe se chiamata per feature non inserite di nuovi pianeti
 # funzione per richiamare la query prolog che restituisce il valore della feature indicata del pianeta dato
 def getValue(planet, feature):
     
@@ -72,7 +71,7 @@ def getValue(planet, feature):
    
     elif(property == "planetary_system"):
         verb = "hostname"
-        myQuery = "prop(" + planet + ", " + verb + ", X)."        
+        myQuery = "prop(" + planet + ", " + verb + ", X)." 
 
     else:
         verb = "has_" + property
@@ -121,24 +120,30 @@ def addPlanet(planet, valueList):
 # funzione per richiamare la query prolog che restituisce il valore della feuture indicata della stella data
 def getStarFeatures(planet, feature):    
     verb = ""
-    feature.strip()
+    property = feature.replace(" ", "_")  
+    print(property)
 
-    if(feature == "effectivetemperature"):
+    if(property == "effective_temperature"):
         verb = "his_star_has_temp"
         myQuery = "prop(" + planet + ", " + verb + ", X)"
         
-    elif(feature == "metallicity"):
+    elif(property == "metallicity"):
         verb = "his_star_has_met"
         myQuery = "prop(" + planet + ", " + verb + ", X)"
    
-    elif(feature == "spectralclassification"):
+    elif(property == "spectral_classification"):
         verb = "his_star_is_class"
         myQuery = "prop(" + planet + ", " + verb + ", X)"
+        
+    elif(property == "planets_in_system"):
+        verb = "planets_in_sys"       
+        myQuery = "prop(" + planet + ", " + verb + ", X)."
 
     resultQuery = list(prolog.query(myQuery))
     for elem in resultQuery:
-        result = elem["X"]            
-        print("The metallicity of the chosen star is: " + result)  
+        result = elem["X"]   
+
+    print(property + " for the chosen star is: " + str(result))  
         
 #######################################################################################################################################################################
 
@@ -244,7 +249,7 @@ def getStarTempClass(starTemp):
 def getFeatures(): #n potrei anche usare query prolog ma le features sono sempre le stesse...
 
     features = ["hostname", "has_radius", "has_mass", "has_density", "has_gravity", "has_temp", "has_composition", "has_atmosphere",
-    "has_eccentricity", "has_orbit_period", "distance_from_star", "has_stars_in_sys", "his_star_has_met", "his_star_has_temp",
+    "has_eccentricity", "has_orbit_period", "distance_from_star", "planets_in_sys", "his_star_has_met", "his_star_has_temp",
     "is_hab_class", "was_discovered_in"]  
 
     return features
@@ -302,7 +307,7 @@ def createDict(values):
    
     featureDict = {"star": values[0],"radius": values[1], "mass": values[2], "density": values[3], "gravity": values[4], "eqTemp": values[5],
                     "composition": values[6], "atmosphere": values[7], "eccentricity": values[8], "oPeriod": values[9], "hzd": values[10],
-                    "numStars": values[11], "met": values[12], "starTemp": values[13], "year": values[14], "hab": values[15]}
+                    "numPlanets": values[11], "met": values[12], "starTemp": values[13], "year": values[14], "hab": values[15]}
 
     return featureDict      
 
@@ -312,6 +317,6 @@ def transform(featureDict):
 
     massRadius, densityClass, gravityClass, eqTempClass, eccentricityClass, oPeriodClass, hzdClass, metClass, sTempClass = classifyValues(featureDict)  
               
-    exampleFact = "esempio("+featureDict["hab"]+", [massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+featureDict["composition"]+", atmosphere = "+featureDict["atmosphere"]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_stars = "+featureDict["numStars"]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"])"
+    exampleFact = "esempio("+featureDict["hab"]+", [massRadius_class = "+ massRadius +", density = "+ densityClass +", gravity = "+gravityClass+",  eq_temp = "+eqTempClass+", composition = "+featureDict["composition"]+", atmosphere = "+featureDict["atmosphere"]+", eccentricity = "+eccentricityClass+", orbit_period_days = "+oPeriodClass+", zone_class = "+hzdClass+", num_planets = "+featureDict["numPlanets"]+", metallicity = "+metClass+", star_temp_class = "+sTempClass+"])"
     prolog.assertz(exampleFact)
         
