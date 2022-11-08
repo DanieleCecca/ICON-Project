@@ -1,9 +1,6 @@
 import menu
-import streamlitFile as welcome
 
-
-if __name__ == '__main__':    
-    #welcome.welcome()
+if __name__ == '__main__':        
     menu.menu()
 
 

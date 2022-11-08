@@ -1,7 +1,7 @@
 from pyswip import Prolog
 
 prolog = Prolog()
-prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo2.pl")
+prolog.consult("exo2.pl")
 
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
@@ -250,7 +250,7 @@ def getFeatures(): #n potrei anche usare query prolog ma le features sono sempre
 
     features = ["hostname", "has_radius", "has_mass", "has_density", "has_gravity", "has_temp", "has_composition", "has_atmosphere",
     "has_eccentricity", "has_orbit_period", "distance_from_star", "planets_in_sys", "his_star_has_met", "his_star_has_temp",
-    "is_hab_class", "was_discovered_in"]  
+    "was_discovered_in", "is_hab_class"]  
 
     return features
 

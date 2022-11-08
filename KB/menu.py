@@ -16,7 +16,7 @@ def menu():
             +"\n4) Add a new exoplanet"  
             +"\n5) Classify an exoplanet: is it habitable or not?")        
         
-        command = input("\nEnter a number...\n> ")
+        command = input("\nEnter a command...\n> ")
 
         planetList = pl.getExoplanets() #posizione corretta: aggiorna lista pianeti dopo che è uscito da addPlanet()
         initialization(planetList) 
