@@ -16,7 +16,7 @@ def menu():
             +"\n4) Add a new exoplanet"  
             +"\n5) Classify an exoplanet: is it habitable or not?")        
         
-        command = input("\nEnter a number...\n> ")
+        command = input("\nEnter a command...\n> ")
 
         planetList = pl.getExoplanets() #posizione corretta: aggiorna lista pianeti dopo che è uscito da addPlanet()
         initialization(planetList) 
@@ -105,13 +105,14 @@ def menuAddingPlanet():
 
     valueList.pop()
     valueList.append(is_hab_class)
+    print(valueList)
     #print(is_hab_class)
     pl.addPlanet(planet, valueList)
 
     print("\nExoplanet: inserted")
 
 def printPlanetFeatures():
-    print("\nFeatures:"
+    st.write("\nFeatures:"
           +"\n- radius"
           +"\n- mass"
           +"\n- density"
@@ -142,7 +143,7 @@ def subMenuStar(planet):
 
 
 def printStarFeatures():
-    print("Features of the star:"
+    st.write("Features of the star:"
           +"\n- metallicity"
           +"\n- effective temperature"
           +"\n- planets in system"

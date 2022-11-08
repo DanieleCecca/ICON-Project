@@ -1,7 +1,9 @@
 from pyswip import Prolog
+import streamlit as st
 
 prolog = Prolog()
-prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo2.pl")
+#prolog.consult("C:/Users/follo/OneDrive/Documenti/GitHub/ICON-Project/KB/exo2.pl")
+prolog.consult("exo2.pl")
 
 
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti
@@ -13,21 +15,21 @@ def getExoplanets():
 
 # funzione che stampa tutti gli esopianeti
 def printExoplanets(planets):
-    print("\nList of all the exoplanets:")
+    st.markdown("**List of all the exoplanets:**")
     for elem in planets:
-        queryPlanets = "> "+ elem["P"] + ""  
-        print(queryPlanets)
+        queryPlanets = "- "+ elem["P"]  
+        st.caption(queryPlanets)
 
         
 # funzione per richiamare la query prolog che restituisce tutti gli esopianeti abitabili
 def getHabitableExoplanets():
 
-    print("\nList of all the habitable exoplanets:")
+    st.markdown("**List of all the habitable exoplanets:**")
     myQuery = "prop(P, is_hab_class, habitable)."
     planets = list(prolog.query(myQuery))
     for elem in planets:
-        queryPlanets = "> "+ elem["P"] +""
-        print(queryPlanets)
+        queryPlanets = "- "+ elem["P"]
+        st.caption(queryPlanets)
 
 
 #TODO si rompe se cercato pianeta inserito: non abbastanza info
@@ -47,8 +49,9 @@ def getInfo(planet):
 
     massRadiusClass = getMassRadiusClass(featureDict["mass"], featureDict["radius"])
 
-    print("\n"+ planet + " is a " + featureDict["hab"]+ " exoplanet discovered in " + featureDict["year"] + " and it is in a planetary system" +
-    " whose star is " + featureDict["star"] + ".\nIt is a " + massRadiusClass +"-like planet.")    
+    st.write("Brief description :arrow_down_small:")
+    st.markdown("> ##### :telescope: | "+ planet + " is a " + featureDict["hab"]+ " exoplanet discovered in " + featureDict["year"] + " and it is in a planetary system" +
+    " whose star is " + featureDict["star"] + ". It is a " + massRadiusClass +"-like planet.")    
 
         
 # funzione per richiamare la query prolog che restituisce il valore della feature indicata del pianeta dato
@@ -83,8 +86,8 @@ def getValue(planet, feature):
 
     featureClass = featureClassification(feature, str(result)) #le funz. di classif. vogliono stringhe
 
-    print("\nThe chosen exoplanet for the feature '" + feature + "' has value: "+str(result)+",")
-    print("and belongs to the feature class: "+featureClass+"")
+    st.markdown("> ##### The chosen exoplanet for the feature '" + feature + "' has value: "+str(result)
+            +" and belongs to the feature class: "+featureClass+"")
 
 
 def featureClassification(feature, value):
@@ -121,7 +124,7 @@ def addPlanet(planet, valueList):
 def getStarFeatures(planet, feature):    
     verb = ""
     property = feature.replace(" ", "_")  
-    print(property)
+    #print(property)
 
     if(property == "effective_temperature"):
         verb = "his_star_has_temp"
@@ -143,7 +146,7 @@ def getStarFeatures(planet, feature):
     for elem in resultQuery:
         result = elem["X"]   
 
-    print(property + " for the chosen star is: " + str(result))  
+    st.markdown("> ##### :sunny: | " + feature + " for the chosen star is: " + str(result))  
         
 #######################################################################################################################################################################
 
@@ -250,7 +253,7 @@ def getFeatures(): #n potrei anche usare query prolog ma le features sono sempre
 
     features = ["hostname", "has_radius", "has_mass", "has_density", "has_gravity", "has_temp", "has_composition", "has_atmosphere",
     "has_eccentricity", "has_orbit_period", "distance_from_star", "planets_in_sys", "his_star_has_met", "his_star_has_temp",
-    "is_hab_class", "was_discovered_in"]  
+    "was_discovered_in", "is_hab_class"]  
 
     return features
 
@@ -273,7 +276,7 @@ def classifyValues(featureDict):
 def classifyExample(example):   
 
     resultClass = classify(example)
-    print("\nThe exoplanet entered belongs to the class: " + resultClass)
+    st.markdown("> ##### :bird: | The exoplanet entered belongs to the class: " + resultClass)
 
     return resultClass 
 
